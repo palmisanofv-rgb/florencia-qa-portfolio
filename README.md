@@ -7,7 +7,7 @@ Cuento con experiencia en ejecución de pruebas, reporte de bugs y documentació
 ---
 
 ## 🧩 Tecnologías y herramientas
-- **Testing manual:** TestRail, Jira, Trello, Zephyr
+- **Testing manual:** TestRail, Jira, Trello
 - **Automatización:** Cypress, Selenium, Playwright
 - **APIs:** Postman
 - **Bases de datos:** MySQL
