@@ -16,7 +16,7 @@ Cada subcarpeta contiene documentación específica y matrices de testing en Exc
 <div align="center">
 
 ### 🛒 [Mercado Libre](./mercado-libre/)
-![Mercado Libre](https://via.placeholder.com/150x50/ffe600/000000?text=Mercado+Libre)
+<img src="https://img.shields.io/badge/MERCADO_LIBRE-E-commerce-orange?style=for-the-badge&logo=mercadopago&logoColor=white" alt="Mercado Libre" width="250">
 
 **📍 Rubro:** E-commerce  
 **🚀 Plataforma:** Web  
@@ -24,7 +24,7 @@ Cada subcarpeta contiene documentación específica y matrices de testing en Exc
 **💡 Por qué esta app:** Representa el e-commerce más grande de Latinoamérica - ideal para testing de flujos business-critical
 
 ### 🎵 [Spotify](./spotify/) - *Próximamente*
-![Spotify](https://via.placeholder.com/150x50/1db954/ffffff?text=Spotify)
+<img src="https://img.shields.io/badge/SPOTIFY-Music_Streaming-green?style=for-the-badge&logo=spotify&logoColor=white" alt="Spotify" width="250">
 
 **📍 Rubro:** Music Streaming  
 **🚀 Plataforma:** Mobile & Desktop  
@@ -32,7 +32,7 @@ Cada subcarpeta contiene documentación específica y matrices de testing en Exc
 **💡 Por qué esta app:** App de streaming con alta demanda de performance - perfecta para testing de UX y rendimiento
 
 ### 🏦 [Revolut](./revolut/) - *Próximamente*
-![Revolut](https://via.placeholder.com/150x50/0000ff/ffffff?text=Revolut)
+<img src="https://img.shields.io/badge/REVOLUT-Digital_Banking-blue?style=for-the-badge&logo=revolut&logoColor=white" alt="Revolut" width="250">
 
 **📍 Rubro:** Digital Banking  
 **🚀 Plataforma:** Mobile App  
@@ -40,7 +40,7 @@ Cada subcarpeta contiene documentación específica y matrices de testing en Exc
 **💡 Por qué esta app:** Fintech moderna - excelente para testing de seguridad y transacciones críticas
 
 ### 🎮 [Stardew Valley](./stardew-valley/) - *Próximamente*
-![Stardew Valley](https://via.placeholder.com/150x50/00aa00/ffffff?text=Stardew+Valley)
+<img src="https://img.shields.io/badge/STARDEW_VALLEY-Gaming-brightgreen?style=for-the-badge&logo=game&logoColor=white" alt="Stardew Valley" width="250">
 
 **📍 Rubro:** Gaming  
 **🚀 Plataforma:** Mobile & Desktop  
@@ -59,6 +59,10 @@ Cada subcarpeta contiene documentación específica y matrices de testing en Exc
 - 🎮 **Gaming** - Mecánicas de juego y progresión
 
 > 💡 **Selección estratégica:** Elegí estas apps para cubrir diferentes rubros, tecnologías y complejidades, demostrando adaptabilidad en testing.
+
+---
+
+**✨ Próximas apps:** Netflix, Airbnb, Uber, WhatsApp
 
 ---
 
