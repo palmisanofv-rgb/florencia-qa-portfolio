@@ -26,7 +26,7 @@ En este repositorio vas a encontrar:
 
 ## 🚀 Próximamente
 Estoy en proceso de subir mis primeros proyectos de testing.  
-Mientras tanto, podés visitar mi [LinkedIn]([https://www.linkedin.com/](https://www.linkedin.com/in/florencia-del-valle-palmisano-a30840277/)) o contactarme por mensaje directo.  
+Mientras tanto, podés visitar mi [LinkedIn](https://www.linkedin.com/](https://www.linkedin.com/in/florencia-del-valle-palmisano-a30840277/) o contactarme por mensaje directo.  
 ¡Gracias por visitar mi portfolio! 🙌
 
 ---
