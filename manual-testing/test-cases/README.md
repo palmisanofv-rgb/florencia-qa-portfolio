@@ -64,6 +64,4 @@ Cada subcarpeta contiene documentación específica y matrices de testing en Exc
 
 **✨ Próximas apps:** Netflix, Airbnb, Uber, WhatsApp
 
----
 
-**✨ Próximas apps:** Netflix, Airbnb, Uber, WhatsApp
