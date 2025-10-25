@@ -16,7 +16,7 @@ Cada subcarpeta contiene documentación específica y matrices de testing en Exc
 <div align="center">
 
 ### 🛒 [Mercado Libre](./mercado-libre/)
-<img src="https://img.shields.io/badge/MERCADO_LIBRE-E-commerce-orange?style=for-the-badge&logo=mercadopago&logoColor=white" alt="Mercado Libre" width="250">
+<img src="https://img.shields.io/badge/MERCADO_LIBRE-E--commerce-FFE600?style=for-the-badge&logoColor=000000&labelColor=FFE600&color=000000" alt="Mercado Libre" width="250">
 
 **📍 Rubro:** E-commerce  
 **🚀 Plataforma:** Web  
