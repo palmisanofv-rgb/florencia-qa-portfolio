@@ -1,59 +1,81 @@
-# 👋 ¡Hola! Soy Florencia
+# 👋 Hi, I'm Florencia
 
-**QA Analyst | ISTQB Certified | Especialista en Testing Manual & Automatizado**
+**QA Engineer | ISTQB Certified (Core + AI + GenAI) | Manual & Automation Testing**
 
-**Analista de calidad: diseño sistemas de testing que transforman código en productos confiables**  
-Con expertise técnico comprobable en detección temprana de defectos y automatización estratégica que garantiza software robusto.
-No solo busco bugs: **construyo sistemas de calidad que escalan** desde el código hasta la experiencia de usuario.
-
-## 🚀 Mi Impacto en Métricas
-
-- **+40% eficiencia** en procesos mediante automatización estratégica
-- **35% más bugs** detectados con pruebas exploratorias proactivas  
-- **50% más rápido** en resolución con documentación técnica precisa
-- **200+ endpoints** críticos validados en APIs
-
-## 🛠 Stack Tecnológico
-
-### **🤖 Automatización**
-<img src="https://img.shields.io/badge/Cypress-17202C?style=for-the-badge&logo=cypress&logoColor=white" alt="Cypress">
-<img src="https://img.shields.io/badge/Selenium-43B02A?style=for-the-badge&logo=selenium&logoColor=white" alt="Selenium">
-<img src="https://img.shields.io/badge/Playwright-2EAD33?style=for-the-badge&logo=playwright&logoColor=white" alt="Playwright">
-
-### **🔧 Testing & Desarrollo**
-<img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white" alt="Postman">
-<img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL">
-<img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" alt="Git">
-
-### **📋 Gestión & Metodologías**
-<img src="https://img.shields.io/badge/Jira-0052CC?style=for-the-badge&logo=jira&logoColor=white" alt="Jira">
-<img src="https://img.shields.io/badge/TestRail-65C179?style=for-the-badge" alt="TestRail">
-<img src="https://img.shields.io/badge/Agile/Scrum-0096D6?style=for-the-badge" alt="Agile/Scrum">
-
-## 📁 Estructura del Portfolio
-
-| Área | Contenido | Tecnologías |
-|------|-----------|-------------|
-| **🧪 Testing Manual** | Casos de prueba, reportes, análisis de defectos | TestRail, Jira, Zephyr |
-| **⚙️ Automatización** | Scripts y frameworks con resultados medibles | Cypress, Selenium, Playwright |
-| **🔍 APIs** | Pruebas de endpoints y colecciones | Postman, Newman |
-| **📊 Documentación** | Test plans, casos de prueba, bug reports | Excel, Word, Confluence |
-
-## 🎯 Enfoque de Calidad
-
-- **Testing estratégico**: Basado en análisis de riesgo
-- **Automatización inteligente**: Donde genera máximo ROI  
-- **Mejora continua**: Optimización constante de procesos
-- **Enfoque en el usuario**: Calidad que el usuario percibe
-
-## 📫 Conectemos
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-%230077B5?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/florencia-del-valle-palmisano-a30840277/)
+I design test systems that turn code into reliable products — from the first line to the user experience.  
+I don't just find bugs. I build quality that scales.
 
 ---
 
-> **🚀 Próximamente:** Estoy subiendo mis primeros proyectos con casos reales y métricas demostrables.  
-> **⭐ Seguime para ver las actualizaciones**
+## 🎓 Certifications
 
-*"No solo encuentro bugs: diseño sistemas de calidad que escalan"*
+![ISTQB](https://img.shields.io/badge/ISTQB-Foundation-0052CC?style=for-the-badge)
+![ISTQB](https://img.shields.io/badge/ISTQB-AI_Testing-2EAD33?style=for-the-badge)
+![ISTQB](https://img.shields.io/badge/ISTQB-GenAI_Testing-FF6C37?style=for-the-badge)
 
+- **ISTQB Certified Tester – Foundation Level (CTFL)**
+- **ISTQB AI Testing (CT-AI)** — Testing AI-based systems
+- **ISTQB Testing with Generative AI (CT-GenAI)** — Testing LLMs & GenAI applications
+
+---
+
+## 📊 Proven Impact
+
+| Metric | Result |
+|--------|--------|
+| Process efficiency | **+40%** through strategic automation |
+| Early bug detection | **35% more** with exploratory testing |
+| Resolution speed | **50% faster** with precise documentation |
+| API coverage | **200+ critical endpoints** validated |
+
+---
+
+## 🛠 Tech Stack
+
+### 🤖 Automation
+![Playwright](https://img.shields.io/badge/Playwright-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)
+![Katalon](https://img.shields.io/badge/Katalon-009688?style=for-the-badge&logo=katalon&logoColor=white)
+![Selenium](https://img.shields.io/badge/Selenium-43B02A?style=for-the-badge&logo=selenium&logoColor=white)
+
+### 🔧 API & Development
+![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+
+### 📋 Management & Methodologies
+![Jira](https://img.shields.io/badge/Jira-0052CC?style=for-the-badge&logo=jira&logoColor=white)
+![TestRail](https://img.shields.io/badge/TestRail-65C179?style=for-the-badge)
+![Agile](https://img.shields.io/badge/Agile/Scrum-0096D6?style=for-the-badge)
+
+---
+
+## 📁 Portfolio Structure
+
+| Area | Content | Tools |
+|------|---------|-------|
+| **🧪 Manual Testing** | Test cases, reports, defect analysis | TestRail, Jira, Zephyr |
+| **⚙️ Automation** | Scripts & frameworks with measurable results | Katalon, Selenium, Playwright |
+| **🔍 APIs** | Endpoint testing & collections | Postman, Newman |
+| **📊 Documentation** | Test plans, bug reports, traceability | Excel, Word, Confluence |
+
+---
+
+## 🎯 My Quality Approach
+
+- **Risk-based testing** — Maximum ROI where it matters most
+- **Smart automation** — Only automate what scales
+- **Continuous improvement** — Processes evolve with data
+- **User-first mindset** — Quality the user actually feels
+
+---
+
+## 📫 Let's connect
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Florencia-0A66C2?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/florencia-del-valle-palmisano-a30840277/)
+
+---
+
+> **🚀 What's next:** Real projects with real metrics — coming soon  
+> **⭐ Follow for updates**
+
+*"I don't just find bugs. I build quality that scales."*
