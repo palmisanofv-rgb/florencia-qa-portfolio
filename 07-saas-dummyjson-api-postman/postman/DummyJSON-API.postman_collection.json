@@ -1,0 +1,184 @@
+{
+  "info": {
+    "name": "DummyJSON API",
+    "description": "Auth/JWT + product & cart CRUD against the free dummyjson.com sandbox",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login - valid credentials",
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('accessToken is present', () => pm.expect(body.accessToken).to.be.a('string'));",
+              "pm.environment.set('access_token', body.accessToken);"
+            ]}
+          }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "https://dummyjson.com/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"emilys\", \"password\": \"emilyspass\"}"
+            }
+          }
+        },
+        {
+          "name": "Login - invalid credentials (expect 400)",
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status code is 400', () => pm.response.to.have.status(400));",
+              "pm.test('no accessToken issued', () => pm.expect(pm.response.json().accessToken).to.be.undefined);"
+            ]}
+          }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "https://dummyjson.com/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"emilys\", \"password\": \"wrong-password\"}"
+            }
+          }
+        },
+        {
+          "name": "Get Current User (Bearer token from login)",
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+              "pm.test('username matches logged-in user', () => pm.expect(pm.response.json().username).to.eql('emilys'));"
+            ]}
+          }],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": "https://dummyjson.com/auth/me"
+          }
+        },
+        {
+          "name": "Get Current User - malformed token (expect 401/403)",
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status code is 401 or 403', () => pm.expect([401, 403]).to.include(pm.response.code));"
+            ]}
+          }],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer not-a-real-token" }],
+            "url": "https://dummyjson.com/auth/me"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Search Products - valid keyword",
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('every result matches the search term', () => {",
+              "  body.products.forEach(p => {",
+              "    const haystack = (p.title + ' ' + p.description).toLowerCase();",
+              "    pm.expect(haystack).to.include('phone');",
+              "  });",
+              "});"
+            ]}
+          }],
+          "request": {
+            "method": "GET",
+            "url": "https://dummyjson.com/products/search?q=phone"
+          }
+        },
+        {
+          "name": "Add Product (mock create)",
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status code is 201 or 200', () => pm.expect([200, 201]).to.include(pm.response.code));",
+              "pm.test('response echoes submitted title', () => pm.expect(pm.response.json().title).to.eql('QA Portfolio Test Product'));"
+            ]}
+          }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "https://dummyjson.com/products/add",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": \"QA Portfolio Test Product\"}"
+            }
+          }
+        },
+        {
+          "name": "Update Product (mock update)",
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+              "pm.test('price reflects the update', () => pm.expect(pm.response.json().price).to.eql(999));"
+            ]}
+          }],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "https://dummyjson.com/products/1",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"price\": 999}"
+            }
+          }
+        },
+        {
+          "name": "Delete Product (mock delete)",
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+              "pm.test('isDeleted flag is true', () => pm.expect(pm.response.json().isDeleted).to.eql(true));"
+            ]}
+          }],
+          "request": {
+            "method": "DELETE",
+            "url": "https://dummyjson.com/products/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Carts",
+      "item": [
+        {
+          "name": "Get Cart By ID - verify line-item totals",
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+              "const cart = pm.response.json();",
+              "pm.test('each product total = price * quantity (within discount rounding)', () => {",
+              "  cart.products.forEach(p => {",
+              "    pm.expect(p.total).to.be.closeTo(p.price * p.quantity, 0.01);",
+              "  });",
+              "});"
+            ]}
+          }],
+          "request": {
+            "method": "GET",
+            "url": "https://dummyjson.com/carts/1"
+          }
+        }
+      ]
+    }
+  ]
+}
