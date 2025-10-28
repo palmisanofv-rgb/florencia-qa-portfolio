@@ -25,7 +25,7 @@ newman run postman/AutomationExercise-API.postman_collection.json \
   --reporters cli,junit --reporter-junit-export results.xml
 ```
 
-The `Account Lifecycle` folder runs in order (create → read → update → delete) so it self-contains its own test data and never leaves accounts behind on the shared sandbox.
+The `Account Lifecycle` folder runs in strict order — create → verify login (valid + 3 negative cases) → read → update → delete — because the login-verification requests need the account to exist and haven't been deleted yet. This folder self-contains its own test data and never leaves accounts behind on the shared sandbox. (Earlier draft of this collection had "Login Verification" as a separate folder running *before* account creation, which would have failed since `qa_email`/`qa_password` wouldn't exist yet — fixed by nesting it inside the lifecycle sequence instead.)
 
 ## Notes
 

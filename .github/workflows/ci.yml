@@ -1,0 +1,148 @@
+name: QA Portfolio CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  api-tests-postman:
+    name: API tests (Postman/Newman) - Projects 01, 05, 07
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install -g newman
+      - name: Project 01 - AutomationExercise API
+        run: |
+          newman run 01-ecommerce-automationexercise/api-testing-postman/postman/AutomationExercise-API.postman_collection.json \
+            -e 01-ecommerce-automationexercise/api-testing-postman/postman/AutomationExercise-API.postman_environment.json
+      - name: Project 05 - TVMaze API
+        run: newman run 05-media-tvmaze-api-postman/postman/TVMaze-API.postman_collection.json
+      - name: Project 07 - DummyJSON API
+        run: newman run 07-saas-dummyjson-api-postman/postman/DummyJSON-API.postman_collection.json
+
+  playwright-e2e:
+    name: UI automation (Playwright) - Project 01
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 01-ecommerce-automationexercise/automation-playwright
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: 01-ecommerce-automationexercise/automation-playwright/playwright-report/
+          retention-days: 14
+
+  selenium-java:
+    name: UI automation (Selenium + Java) - Project 02
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 02-ecommerce-saucedemo-selenium-java
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - run: mvn -B test
+
+  selenium-python-and-sql:
+    name: UI automation (Selenium + Python) + SQL - Project 04
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 04-banking-parabank-selenium-python
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt
+      - run: pytest -v
+      - name: Run local SQL reconciliation companion
+        run: |
+          sqlite3 parabank_mock.db < sql/schema.sql
+          sqlite3 parabank_mock.db < sql/reconciliation-queries.sql
+
+  webdriverio:
+    name: Technique lab (WebdriverIO) - Project 08
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 08-technique-lab-the-internet-webdriverio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npx wdio run wdio.conf.js
+
+  jmeter-smoke-test:
+    name: Performance smoke test (JMeter) - Project 06
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install JMeter
+        run: |
+          wget -q https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.6.3.tgz
+          tar -xzf apache-jmeter-5.6.3.tgz
+      - name: Run BlazeDemo booking journey (5 users / 2 loops)
+        run: |
+          ./apache-jmeter-5.6.3/bin/jmeter -n \
+            -t 06-travel-blazedemo-jmeter/jmeter/BlazeDemo-LoadTest.jmx \
+            -l results.jtl -j jmeter.log
+      - name: Fail the job if any sample failed
+        run: |
+          if grep -q ',false,' results.jtl; then
+            echo "One or more samplers failed:"; cat jmeter.log; exit 1
+          fi
+          echo "All samplers passed."
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jmeter-results
+          path: |
+            results.jtl
+            jmeter.log
+          retention-days: 14
+
+  sql-etl-validation:
+    name: Data/ETL validation (SQL) - Project 10
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 10-database-sql-etl-validation
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the warehouse and run every validation suite
+        run: |
+          sqlite3 warehouse.db < schema/source_schema.sql
+          sqlite3 warehouse.db < schema/warehouse_schema.sql
+          sqlite3 warehouse.db < etl/seed_and_simulate_etl.sql
+          echo "--- Row-count reconciliation (expected: clean) ---"
+          sqlite3 -header -column warehouse.db < validation/row_count_reconciliation.sql
+          echo "--- Referential integrity (expected: zero rows) ---"
+          sqlite3 -header -column warehouse.db < validation/referential_integrity_checks.sql
+          echo "--- Data quality (expected: zero rows) ---"
+          sqlite3 -header -column warehouse.db < validation/data_quality_checks.sql
+          echo "--- Business rule checks (expected: the seeded order_id=5 discrepancy) ---"
+          sqlite3 -header -column warehouse.db < validation/business_rule_checks.sql

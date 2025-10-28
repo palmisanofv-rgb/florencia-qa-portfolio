@@ -4,6 +4,7 @@ import time
 
 import pytest
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 from pages.register_page import RegisterPage
 
@@ -14,8 +15,14 @@ def _random_string(n):
 
 @pytest.fixture
 def driver():
-    drv = webdriver.Chrome()  # Selenium Manager resolves the driver binary automatically
-    drv.maximize_window()
+    # Headless by default so this suite runs unattended in CI; drop these
+    # arguments locally if you want to watch the browser drive itself.
+    options = Options()
+    options.add_argument("--headless=new")
+    options.add_argument("--window-size=1920,1080")
+
+    drv = webdriver.Chrome(options=options)  # Selenium Manager resolves the driver binary automatically
+    drv.implicitly_wait(10)
     yield drv
     drv.quit()
 

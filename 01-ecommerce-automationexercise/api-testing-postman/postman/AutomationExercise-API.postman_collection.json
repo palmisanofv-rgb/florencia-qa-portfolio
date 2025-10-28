@@ -126,98 +126,6 @@
       ]
     },
     {
-      "name": "Login Verification",
-      "item": [
-        {
-          "name": "Verify Login - valid details",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test('responseCode is 200', () => pm.expect(pm.response.json().responseCode).to.eql(200));",
-                  "pm.test('message is User exists!', () => pm.expect(pm.response.json().message).to.eql('User exists!'));"
-                ]
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "url": { "raw": "{{base_url}}/api/verifyLogin", "host": ["{{base_url}}"], "path": ["api", "verifyLogin"] },
-            "body": {
-              "mode": "urlencoded",
-              "urlencoded": [
-                { "key": "email", "value": "{{qa_email}}" },
-                { "key": "password", "value": "{{qa_password}}" }
-              ]
-            }
-          }
-        },
-        {
-          "name": "Verify Login - missing email (expect 400)",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test('responseCode is 400', () => pm.expect(pm.response.json().responseCode).to.eql(400));"
-                ]
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "url": { "raw": "{{base_url}}/api/verifyLogin", "host": ["{{base_url}}"], "path": ["api", "verifyLogin"] },
-            "body": {
-              "mode": "urlencoded",
-              "urlencoded": [{ "key": "password", "value": "{{qa_password}}" }]
-            }
-          }
-        },
-        {
-          "name": "Verify Login - DELETE not supported (expect 405)",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test('responseCode is 405', () => pm.expect(pm.response.json().responseCode).to.eql(405));"
-                ]
-              }
-            }
-          ],
-          "request": {
-            "method": "DELETE",
-            "url": { "raw": "{{base_url}}/api/verifyLogin", "host": ["{{base_url}}"], "path": ["api", "verifyLogin"] }
-          }
-        },
-        {
-          "name": "Verify Login - invalid details (expect 404)",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test('responseCode is 404', () => pm.expect(pm.response.json().responseCode).to.eql(404));"
-                ]
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "url": { "raw": "{{base_url}}/api/verifyLogin", "host": ["{{base_url}}"], "path": ["api", "verifyLogin"] },
-            "body": {
-              "mode": "urlencoded",
-              "urlencoded": [
-                { "key": "email", "value": "nonexistent.{{$timestamp}}@example.com" },
-                { "key": "password", "value": "whatever" }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
       "name": "Account Lifecycle",
       "item": [
         {
@@ -270,7 +178,94 @@
           }
         },
         {
-          "name": "2. Get User Detail By Email",
+          "name": "2. Verify Login - valid details",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('responseCode is 200', () => pm.expect(pm.response.json().responseCode).to.eql(200));",
+                  "pm.test('message is User exists!', () => pm.expect(pm.response.json().message).to.eql('User exists!'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/api/verifyLogin", "host": ["{{base_url}}"], "path": ["api", "verifyLogin"] },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                { "key": "email", "value": "{{qa_email}}" },
+                { "key": "password", "value": "{{qa_password}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "3. Verify Login - missing email (expect 400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('responseCode is 400', () => pm.expect(pm.response.json().responseCode).to.eql(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/api/verifyLogin", "host": ["{{base_url}}"], "path": ["api", "verifyLogin"] },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [{ "key": "password", "value": "{{qa_password}}" }]
+            }
+          }
+        },
+        {
+          "name": "4. Verify Login - DELETE not supported (expect 405)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('responseCode is 405', () => pm.expect(pm.response.json().responseCode).to.eql(405));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{base_url}}/api/verifyLogin", "host": ["{{base_url}}"], "path": ["api", "verifyLogin"] }
+          }
+        },
+        {
+          "name": "5. Verify Login - invalid details (expect 404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('responseCode is 404', () => pm.expect(pm.response.json().responseCode).to.eql(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/api/verifyLogin", "host": ["{{base_url}}"], "path": ["api", "verifyLogin"] },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                { "key": "email", "value": "nonexistent.{{$timestamp}}@example.com" },
+                { "key": "password", "value": "whatever" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "6. Get User Detail By Email",
           "event": [
             {
               "listen": "test",
@@ -293,7 +288,7 @@
           }
         },
         {
-          "name": "3. Update Account",
+          "name": "7. Update Account",
           "event": [
             {
               "listen": "test",
@@ -333,7 +328,7 @@
           }
         },
         {
-          "name": "4. Delete Account (teardown)",
+          "name": "8. Delete Account (teardown)",
           "event": [
             {
               "listen": "test",

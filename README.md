@@ -2,6 +2,10 @@
 
 **QA Engineer → QA Team Lead track | ISTQB Certified (Foundation + AI + GenAI) | Manual, Automation & Test Strategy**
 
+[![QA Portfolio CI](https://github.com/palmisanofv-rgb/florencia-qa-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/palmisanofv-rgb/florencia-qa-portfolio/actions/workflows/ci.yml)
+
+Every suite in this portfolio that can run unattended (Playwright, Postman/Newman, Selenium, WebdriverIO, JMeter, SQL) runs for real on every push via GitHub Actions — click the badge above for live results, not just static code.
+
 I don't just execute test cases — I design the strategy that decides which tests matter, pick the right tool for the team that has to maintain them, and report on quality in numbers a stakeholder can act on. This portfolio is built to demonstrate that range: **10 full-lifecycle QA projects across 10 domains, using 7 different tools**, plus the strategy layer that ties them into one coherent quality program.
 
 ---
