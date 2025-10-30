@@ -59,6 +59,12 @@ jobs:
           distribution: temurin
           java-version: '17'
       - run: mvn -B test
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: selenium-java-failure-artifacts
+          path: 02-ecommerce-saucedemo-selenium-java/target/failure-artifacts/
+          retention-days: 14
 
   selenium-python-and-sql:
     name: UI automation (Selenium + Python) + SQL - Project 04

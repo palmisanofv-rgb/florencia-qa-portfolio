@@ -5,12 +5,14 @@ describe('iframe (TinyMCE editor)', () => {
     const frame = await $('#mce_0_ifr');
     await browser.switchToFrame(frame);
 
-    // #tinymce is a contenteditable <body>, not a form field - WebDriver's "element
-    // clear" endpoint only supports actual input/textarea elements and throws
-    // "invalid element state" here, so clear it by selecting all text instead.
+    // #tinymce is a contenteditable <body>, not a form field. clearValue() calls
+    // WebDriver's "element clear" endpoint (form-fields only) and throws "invalid
+    // element state" here; an explicit click() before typing also fails ("element
+    // click intercepted") because the click point is computed against the outer
+    // document rather than the frame we just switched into. setValue() alone
+    // handles focusing internally without a separate mouse click, so it's the one
+    // that actually works for a contenteditable element inside an iframe.
     const editorBody = await $('#tinymce');
-    await editorBody.click();
-    await browser.keys(['Control', 'a']);
     await editorBody.setValue('Automated via WebdriverIO');
 
     await expect(editorBody).toHaveText('Automated via WebdriverIO', { containing: true });

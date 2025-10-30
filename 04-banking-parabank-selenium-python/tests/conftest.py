@@ -30,14 +30,24 @@ def driver():
 @pytest.fixture
 def registered_user(driver):
     """Registers a fresh Parabank customer for each test (avoids collisions on the shared demo instance)."""
-    username = f"qa_{int(time.time())}_{_random_string(4)}"
+    timestamp = str(int(time.time()))  # numeric-only, safe for phone/SSN fields
+    username = f"qa_{timestamp}{_random_string(4)}"
     password = "P@ssw0rd123"
 
     register = RegisterPage(driver)
     register.open()
     register.register(
+        # Parabank is a single public demo instance shared by every QA learner in the
+        # world - identical SSN/phone across runs risks tripping some duplicate-data
+        # rejection on the shared server, so every field that isn't the account holder's
+        # name is randomized per run, not just the username.
         first="QA", last="Portfolio", address="123 Test St", city="San Francisco",
-        state="CA", zip_code="94107", phone="5555555555", ssn="123456789",
+        state="CA", zip_code="94107", phone=f"555{timestamp[-7:]}", ssn=timestamp[-9:].rjust(9, "1"),
         username=username, password=password,
+    )
+
+    assert "Log Out" in driver.page_source, (
+        f"Registration for {username} did not land on the dashboard - Parabank's shared "
+        f"demo instance may have rejected it. Page title was: {driver.title!r}"
     )
     return {"username": username, "password": password}

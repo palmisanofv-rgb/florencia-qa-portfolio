@@ -16,8 +16,8 @@ public class CheckoutTests extends BaseTest {
         login.login("standard_user", "secret_sauce");
 
         InventoryPage inventory = new InventoryPage(driver);
-        inventory.addToCartByProduct("sauce-labs-backpack");
-        inventory.addToCartByProduct("sauce-labs-bike-light");
+        inventory.addToCartByProductName("Sauce Labs Backpack");
+        inventory.addToCartByProductName("Sauce Labs Bike Light");
         Assert.assertEquals(inventory.getCartBadgeCount(), 2);
 
         inventory.goToCart();
@@ -40,7 +40,7 @@ public class CheckoutTests extends BaseTest {
         login.login("standard_user", "secret_sauce");
 
         InventoryPage inventory = new InventoryPage(driver);
-        inventory.addToCartByProduct("sauce-labs-backpack");
+        inventory.addToCartByProductName("Sauce Labs Backpack");
         inventory.goToCart();
 
         CartPage cart = new CartPage(driver);
