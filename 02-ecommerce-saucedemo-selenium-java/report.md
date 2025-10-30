@@ -1,5 +1,9 @@
 # Test Report — Swag Labs (saucedemo.com)
 
+## Real CI run (GitHub Actions)
+
+First run: 6/9 tests passed, 3 failed on `#add-to-cart-sauce-labs-backpack` (`NoSuchElementException`). Root cause: the inventory page's add-to-cart buttons only carry a `data-test` attribute, not the matching `id` I'd assumed — fixed `InventoryPage.addToCartByProduct` to use `[data-test='...']` instead of `By.id`. All 6 login-account scenarios passed on the first try. See CI badge on the [root README](../README.md) for the current run.
+
 ## Summary
 
 | Suite | Cases | Notes |

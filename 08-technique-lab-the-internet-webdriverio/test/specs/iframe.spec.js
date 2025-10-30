@@ -5,8 +5,12 @@ describe('iframe (TinyMCE editor)', () => {
     const frame = await $('#mce_0_ifr');
     await browser.switchToFrame(frame);
 
+    // #tinymce is a contenteditable <body>, not a form field - WebDriver's "element
+    // clear" endpoint only supports actual input/textarea elements and throws
+    // "invalid element state" here, so clear it by selecting all text instead.
     const editorBody = await $('#tinymce');
-    await editorBody.clearValue();
+    await editorBody.click();
+    await browser.keys(['Control', 'a']);
     await editorBody.setValue('Automated via WebdriverIO');
 
     await expect(editorBody).toHaveText('Automated via WebdriverIO', { containing: true });

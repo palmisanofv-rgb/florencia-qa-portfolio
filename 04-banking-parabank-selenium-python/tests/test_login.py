@@ -19,4 +19,6 @@ def test_login_with_invalid_password_is_rejected(driver, registered_user):
     login.open()
     login.login(registered_user["username"], "wrong-password")
 
-    assert "could not be validated" in login.get_error_text().lower() or "error" in login.get_error_text().lower()
+    # Confirmed via a real CI run: Parabank's actual copy is "could not be verified", not
+    # "validated" as an initial (untested) guess assumed - fixed to match the real string.
+    assert "could not be verified" in login.get_error_text().lower()

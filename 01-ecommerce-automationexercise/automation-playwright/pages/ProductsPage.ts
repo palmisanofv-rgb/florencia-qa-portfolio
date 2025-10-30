@@ -25,7 +25,9 @@ export class ProductsPage {
   }
 
   addToCartByProductId(productId: number): Locator {
-    return this.page.locator(`a[data-product-id="${productId}"].add-to-cart`);
+    // automationexercise.com renders each product's "Add to cart" link twice in the
+    // DOM (a hover overlay + a static footer link) - .first() disambiguates.
+    return this.page.locator(`a[data-product-id="${productId}"].add-to-cart`).first();
   }
 
   async continueShopping() {

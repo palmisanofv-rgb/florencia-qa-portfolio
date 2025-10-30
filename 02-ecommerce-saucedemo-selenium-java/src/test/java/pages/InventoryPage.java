@@ -34,7 +34,9 @@ public class InventoryPage {
     }
 
     public void addToCartByProduct(String productSlug) {
-        driver.findElement(By.id("add-to-cart-" + productSlug)).click();
+        // Sauce Labs' own testing guide recommends data-test over id/class for
+        // this exact reason: the add-to-cart buttons only carry data-test, no id.
+        driver.findElement(By.cssSelector("[data-test='add-to-cart-" + productSlug + "']")).click();
     }
 
     public int getCartBadgeCount() {

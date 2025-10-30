@@ -7,11 +7,20 @@ class AccountsOverviewPage:
     def __init__(self, driver):
         self.driver = driver
 
-    def get_balance(self, account_id):
-        row = self.driver.find_element(By.XPATH, f"//a[text()='{account_id}']/ancestor::tr")
-        balance_text = row.find_elements(By.TAG_NAME, "td")[1].text
-        return float(balance_text.replace("$", "").replace(",", ""))
+    def _rows(self):
+        return self.driver.find_elements(By.CSS_SELECTOR, "#accountTable tbody tr")
 
     def get_account_ids(self):
-        links = self.driver.find_elements(By.CSS_SELECTOR, "#accountTable tbody tr td a")
-        return [el.text for el in links if el.text.isdigit()]
+        ids = []
+        for row in self._rows():
+            cells = row.find_elements(By.TAG_NAME, "td")
+            if cells and cells[0].text.strip().isdigit():
+                ids.append(cells[0].text.strip())
+        return ids
+
+    def get_balance(self, account_id):
+        for row in self._rows():
+            cells = row.find_elements(By.TAG_NAME, "td")
+            if cells and cells[0].text.strip() == str(account_id):
+                return float(cells[1].text.replace("$", "").replace(",", ""))
+        raise ValueError(f"Account {account_id} not found in #accountTable")
