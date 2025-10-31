@@ -5,6 +5,9 @@ import time
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.register_page import RegisterPage
 
@@ -46,8 +49,18 @@ def registered_user(driver):
         username=username, password=password,
     )
 
-    assert "Log Out" in driver.page_source, (
-        f"Registration for {username} did not land on the dashboard - Parabank's shared "
-        f"demo instance may have rejected it. Page title was: {driver.title!r}"
-    )
+    # An instant page_source check here is a race: the confirmation page can still be
+    # settling (or, once, a Cloudflare "Just a moment..." interstitial in front of this
+    # shared public demo) when the assertion runs. A real explicit wait - not the
+    # driver's implicit wait, which page_source doesn't consult at all - covers both
+    # a slow redirect and a self-resolving bot-check the same way.
+    try:
+        WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.LINK_TEXT, "Log Out")))
+    except Exception as exc:
+        raise AssertionError(
+            f"Registration for {username} did not land on the dashboard within 15s - "
+            f"Parabank's shared demo instance may have rejected it or hit a bot check. "
+            f"Page title was: {driver.title!r}"
+        ) from exc
+
     return {"username": username, "password": password}
