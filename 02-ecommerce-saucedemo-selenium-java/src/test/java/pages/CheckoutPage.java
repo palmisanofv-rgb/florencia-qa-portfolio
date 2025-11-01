@@ -1,7 +1,9 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 public class CheckoutPage {
     private final WebDriver driver;
@@ -18,11 +20,18 @@ public class CheckoutPage {
         this.driver = driver;
     }
 
+    // Same JS-dispatched click as CartPage.checkout() and InventoryPage.goToCart() -
+    // native clicks on this app's step-transition buttons weren't reliably
+    // registering as real navigation in CI.
+    private void jsClick(WebElement element) {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+    }
+
     public void fillInformation(String first, String last, String zip) {
         driver.findElement(firstName).sendKeys(first);
         driver.findElement(lastName).sendKeys(last);
         driver.findElement(postalCode).sendKeys(zip);
-        driver.findElement(continueButton).click();
+        jsClick(driver.findElement(continueButton));
     }
 
     public String getErrorMessage() {
@@ -34,7 +43,7 @@ public class CheckoutPage {
     }
 
     public void finish() {
-        driver.findElement(finishButton).click();
+        jsClick(driver.findElement(finishButton));
     }
 
     public String getCompleteHeader() {

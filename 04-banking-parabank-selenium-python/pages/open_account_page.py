@@ -1,5 +1,5 @@
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support.ui import Select, WebDriverWait
 
 BASE_URL = "https://parabank.parasoft.com/parabank/openaccount.htm"
 
@@ -22,4 +22,10 @@ class OpenAccountPage:
         d.find_element(By.CSS_SELECTOR, "input[value='Open New Account']").click()
 
     def get_new_account_id(self):
-        return self.driver.find_element(By.ID, "newAccountId").text
+        # Same class of bug as AccountsOverviewPage's rows: #newAccountId exists in the
+        # DOM as soon as the confirmation page loads, but its text is filled in slightly
+        # after that (implicit wait only waits for the element to *exist*, not for its
+        # text to be non-empty) - confirmed via CI, where this returned '' at read time.
+        return WebDriverWait(self.driver, 10).until(
+            lambda d: d.find_element(By.ID, "newAccountId").text or False
+        )

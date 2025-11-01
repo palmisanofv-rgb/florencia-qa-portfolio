@@ -1,6 +1,6 @@
 # Test Report — Swag Labs (saucedemo.com)
 
-## Real CI run (GitHub Actions) — 3 rounds to green
+## Real CI run (GitHub Actions)
 
 | Round | Result | Root cause found |
 |-------|--------|-------------------|
@@ -9,6 +9,7 @@
 | 3 | 6/8 passed, checkout still failing | **The real bug:** `testng.xml`'s `parallel="methods" thread-count="3"` runs every `@Test` method on one shared TestNG instance, so two threads were typing into the *same* login form at once. A saved failure screenshot (added in this round via `BaseTest`'s new failure-artifact capture) showed the literal proof: `standard_userstandard_user` doubled up in the username field. Switched to sequential execution. |
 | 4 | 6/8 passed, checkout still failing | With the race gone, the *real* selector bug from round 1 was still there — but it wasn't the attribute name, it was that `inventory_item_name`'s `class` attribute has a **trailing space** (`class="inventory_item_name "`), which breaks an exact `@class='...'` XPath match. Confirmed directly from the saved page-source artifact. Switched to `[data-test='add-to-cart-<slug>']`, which the same artifact confirmed is present and correctly formatted. |
 | 5 | 6/8 passed, checkout still failing | Add-to-cart now worked (badge count reached 2), but the screenshot showed the suite stuck on the Products page after `goToCart()` - the cart icon is an empty `<a>` whose visible icon comes from a sibling SVG, and a native WebDriver click on it wasn't registering as real navigation. Switched to `data-test='shopping-cart-link'` plus a JS-dispatched click (`arguments[0].click()` via `JavascriptExecutor`), which bypasses WebDriver's visibility/clickability-at-point checks entirely. |
+| 6 | 6/8 passed, checkout still failing | The cart page itself now loaded correctly, but `cart.checkout()` hit the exact same "native click doesn't register" issue as the cart icon, on `#checkout` this time - even though that button is a completely normal, correctly-located element (confirmed via the artifact). Applied the same JS-dispatched click to `CartPage.checkout()` and, preemptively, to `CheckoutPage`'s continue/finish buttons, rather than waiting for each one to fail in its own CI round. |
 
 The screenshot/page-source capture added to `BaseTest` in round 3 is what turned rounds 3–4 from more guessing into actually diagnosing the real problem — see [`00-qa-strategy-and-leadership/test-strategy-master.md`](../00-qa-strategy-and-leadership/test-strategy-master.md) for why this project treats "a passing suite that asserts the wrong thing" as worse than no suite; the inverse also holds for debugging a *failing* suite; guessing at fixes without evidence just burns cycles.
 

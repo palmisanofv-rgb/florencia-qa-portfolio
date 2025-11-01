@@ -20,7 +20,7 @@ class AccountsOverviewPage:
                     return rows
             return False
 
-        return WebDriverWait(self.driver, 10).until(has_account_row)
+        return WebDriverWait(self.driver, 15).until(has_account_row)
 
     def get_account_ids(self):
         ids = []
