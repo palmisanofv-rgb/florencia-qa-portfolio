@@ -31,3 +31,7 @@ The `Account Lifecycle` folder runs in strict order — create → verify login 
 
 - Assertions check both HTTP status and the API's own `responseCode`/`message` fields, since this API returns `200 OK` at the transport level even for some documented "error" responses (e.g. invalid login returns HTTP 200 with `responseCode: 404` in the body) — a good example of why status-code-only assertions are insufficient for this API.
 - Résumé claim of "200+ critical endpoints validated" (see root [README](../../README.md)) reflects cumulative professional experience across employers, not this specific demo collection.
+
+## Known intermittent failure mode (infrastructure, not code)
+
+On some CI runs, every request in this collection errors with `Exceeded maxRedirects. Probably stuck in a redirect loop` instead of a real response. This is the same bot-protection behavior documented in [`../README.md`](../README.md) for the Playwright suite (a challenge automationexercise.com occasionally serves to GitHub Actions' runner IPs) — Newman, unlike a real browser, can't execute the challenge's JS/redirect logic, so it just loops. Not fixable from the client side; the same collection passes cleanly when the challenge doesn't trigger.

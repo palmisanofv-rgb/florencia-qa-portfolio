@@ -1,6 +1,7 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -13,7 +14,7 @@ public class InventoryPage {
     private final By itemNames = By.className("inventory_item_name");
     private final By itemPrices = By.className("inventory_item_price");
     private final By cartBadge = By.className("shopping_cart_badge");
-    private final By cartLink = By.className("shopping_cart_link");
+    private final By cartLink = By.cssSelector("[data-test='shopping-cart-link']");
 
     public InventoryPage(WebDriver driver) {
         this.driver = driver;
@@ -52,6 +53,11 @@ public class InventoryPage {
     }
 
     public void goToCart() {
-        driver.findElement(cartLink).click();
+        // The cart link is an empty anchor whose visible icon comes from a sibling
+        // SVG rather than its own content/dimensions - a native WebDriver click was
+        // silently not registering as a real navigation. A JS-dispatched click
+        // bypasses WebDriver's clickability/visibility-at-point checks entirely.
+        WebElement link = driver.findElement(cartLink);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", link);
     }
 }

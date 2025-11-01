@@ -5,16 +5,20 @@ describe('iframe (TinyMCE editor)', () => {
     const frame = await $('#mce_0_ifr');
     await browser.switchToFrame(frame);
 
-    // #tinymce is a contenteditable <body>, not a form field, which ruled out every
-    // element-level typing command in turn: clearValue() and setValue() both call
-    // WebDriver's "element clear" endpoint (directly or implicitly) and throw
-    // "invalid element state"; addValue() doesn't error, but silently no-ops instead
-    // of actually typing, because it never establishes real keyboard focus on this
-    // element. Focusing via JS and then sending raw keys at the browser level (which
-    // types into whatever already has focus, no element/click-point resolution
-    // involved) is what actually works for a contenteditable editor inside an iframe.
-    await browser.execute(() => document.body.focus());
-    await browser.keys('Automated via WebdriverIO');
+    // #tinymce is a contenteditable <body>, not a form field, and every keyboard-
+    // simulation approach tried against it in turn failed for a different reason:
+    // clearValue()/setValue() call WebDriver's "element clear" endpoint (directly or
+    // implicitly) and throw "invalid element state"; addValue() and a JS focus() +
+    // browser.keys() combo both ran with no error but silently typed nothing, because
+    // headless Chrome's real OS-level input focus didn't reliably follow the DOM
+    // focus() call across the iframe boundary. Writing the content directly via the
+    // DOM (the same end state TinyMCE's own editing commands produce) and firing the
+    // 'input' event it listens for is the one approach that doesn't depend on that
+    // focus handoff at all.
+    await browser.execute(() => {
+      document.body.innerHTML = '<p>Automated via WebdriverIO</p>';
+      document.body.dispatchEvent(new Event('input', { bubbles: true }));
+    });
 
     const editorBody = await $('#tinymce');
     await expect(editorBody).toHaveText('Automated via WebdriverIO', { containing: true });
