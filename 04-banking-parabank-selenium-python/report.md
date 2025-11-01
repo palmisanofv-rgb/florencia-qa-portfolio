@@ -1,13 +1,15 @@
 # Test Report — Parabank
 
-## Real CI run (GitHub Actions)
+## Real CI run (GitHub Actions) — several rounds, two different failure classes
 
-First run: 1/4 passed, 3 failed — all three failures were genuine locator/assumption bugs, now fixed:
+| Round | Bug found | Root cause | Fix |
+|-------|-----------|-----------|-----|
+| 1 | Invalid-password test failed on a wrong string match | Assumed error text "could not be **validated**"; Parabank's actual copy is "could not be **verified**" | Updated the assertion to the real string |
+| 1 | Both transfer tests failed with `NoSuchElementException` | Fragile `//a[text()='{id}']/ancestor::tr` XPath didn't reliably match the account-number link | Rewrote `AccountsOverviewPage` to read `#accountTable` row-by-row instead of searching by link text |
+| 3 | Registration "succeeded" (title: "Customer Created") but the suite reported it as not landing on the dashboard | An instant `"Log Out" in driver.page_source` check doesn't wait or retry - it raced a still-settling redirect. Once, it genuinely hit a Cloudflare **"Just a moment..."** interstitial on Parabank's shared public demo instance | Replaced with a real `WebDriverWait` for the `Log Out` link, which covers both a slow redirect and a self-resolving bot check |
+| 4 | Same page_source race, in a different spot (`test_login.py`), plus `get_account_ids()`/`get_balance()` still occasionally saw an empty accounts table | Parabank populates `#accountTable`'s rows slightly *after* the page's initial HTML (an AJAX-style fill-in) - any instant read can catch it half-empty, and implicit wait doesn't help because the table isn't literally absent, just short a row | Added an explicit `WebDriverWait` in `AccountsOverviewPage._rows()` that waits for at least one row with a real numeric account id, and switched `test_login.py`'s dashboard check to wait for the `<h1>Accounts Overview</h1>` heading instead of an instant `page_source` check |
 
-| Bug found | Root cause | Fix |
-|-----------|-----------|-----|
-| Invalid-password test failed on a wrong string match | Assumed error text "could not be **validated**"; Parabank's actual copy is "could not be **verified**" | Updated the assertion to the real string |
-| Both transfer tests failed with `NoSuchElementException` on the accounts table | `get_balance()` used a fragile `//a[text()='{id}']/ancestor::tr` XPath that didn't reliably match the account-number link | Rewrote `AccountsOverviewPage` to read `#accountTable` row-by-row (`cells[0]` = account id, `cells[1]` = balance) instead of searching by link text |
+Two real lessons here, both applicable beyond this one project: (1) an instant string-in-`page_source` check is not the same as a wait, and a passing test today can start failing tomorrow purely on timing; (2) a shared public demo instance can occasionally serve a bot-detection challenge instead of your actual page, which a resilient wait can ride out but a code fix alone cannot guarantee against every time.
 
 See CI badge on the [root README](../README.md) for the current run.
 

@@ -34,15 +34,15 @@ public class InventoryPage {
     }
 
     public void addToCartByProductName(String productName) {
-        // Two different guesses at the add-to-cart button's id/data-test attribute
-        // both failed against the live site (confirmed via CI, not assumed) - the
-        // product's visible display name is the one thing guaranteed not to have
-        // drifted, so locate the button relative to that instead of a test hook.
-        String xpath = String.format(
-                "//div[@class='inventory_item_name' and text()='%s']"
-                        + "/ancestor::div[@class='inventory_item']//button",
-                productName);
-        driver.findElement(By.xpath(xpath)).click();
+        // A saved failure screenshot + page source (captured by BaseTest's failure
+        // diagnostics) showed the real, current markup: buttons carry
+        // data-test="add-to-cart-<slug>", and the earlier text-based XPath attempt
+        // failed for an unrelated reason - inventory_item_name's class attribute has
+        // a trailing space ("inventory_item_name "), which breaks an exact
+        // @class='...' match in XPath (By.className/CSS class selectors aren't
+        // affected by this, only a hand-written exact-match XPath is).
+        String slug = productName.toLowerCase().replace(" ", "-");
+        driver.findElement(By.cssSelector("[data-test='add-to-cart-" + slug + "']")).click();
     }
 
     public int getCartBadgeCount() {

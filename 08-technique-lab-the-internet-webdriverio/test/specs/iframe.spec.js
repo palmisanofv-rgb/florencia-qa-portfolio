@@ -5,16 +5,18 @@ describe('iframe (TinyMCE editor)', () => {
     const frame = await $('#mce_0_ifr');
     await browser.switchToFrame(frame);
 
-    // #tinymce is a contenteditable <body>, not a form field, which rules out every
-    // WebdriverIO command that clears before typing: clearValue() calls WebDriver's
-    // "element clear" endpoint directly (form-fields only); setValue() does an
-    // implicit clear-then-type internally, so it hits the exact same "invalid
-    // element state" error. addValue() is the one command in this family that just
-    // sends keystrokes without clearing first, which is what a contenteditable
-    // element inside an iframe actually needs.
-    const editorBody = await $('#tinymce');
-    await editorBody.addValue('Automated via WebdriverIO');
+    // #tinymce is a contenteditable <body>, not a form field, which ruled out every
+    // element-level typing command in turn: clearValue() and setValue() both call
+    // WebDriver's "element clear" endpoint (directly or implicitly) and throw
+    // "invalid element state"; addValue() doesn't error, but silently no-ops instead
+    // of actually typing, because it never establishes real keyboard focus on this
+    // element. Focusing via JS and then sending raw keys at the browser level (which
+    // types into whatever already has focus, no element/click-point resolution
+    // involved) is what actually works for a contenteditable editor inside an iframe.
+    await browser.execute(() => document.body.focus());
+    await browser.keys('Automated via WebdriverIO');
 
+    const editorBody = await $('#tinymce');
     await expect(editorBody).toHaveText('Automated via WebdriverIO', { containing: true });
 
     await browser.switchToParentFrame();

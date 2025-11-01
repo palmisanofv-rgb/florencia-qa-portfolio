@@ -1,15 +1,19 @@
 # Test Report — Technique Lab
 
-## Real CI run (GitHub Actions)
+## Real CI run (GitHub Actions) — the iframe test took 4 attempts to get right
 
-First run: 4/6 specs passed, 2 failed — both genuine bugs, now fixed:
+| Attempt | Result | Root cause / lesson |
+|---------|--------|------|
+| 1 | `invalid element state` | `#tinymce` is a `contenteditable` `<body>`, not a form field — WebDriver's "element clear" endpoint (called by `clearValue()`) only supports actual inputs/textareas |
+| 2 | `element click intercepted` | Added a manual `click()` before typing; the click point gets computed against the *outer* document, not the frame just switched into, so it hit the iframe boundary itself |
+| 3 | No error, but wrong text (`"Your content goes here."`) | Switched to `setValue()`, assuming it types without clearing — it doesn't; WebdriverIO's `setValue()` does an implicit clear-then-type internally, so it silently failed to focus/type at all with no exception raised |
+| 4 (fixed) | Pass | Focused the body directly via `browser.execute(() => document.body.focus())`, then typed with `browser.keys(...)` at the browser level — this sends raw keystrokes to whatever already has focus, with no element/click-point resolution involved, which is what a contenteditable editor inside an iframe actually needs |
 
-| Bug found | Root cause | Fix |
-|-----------|-----------|-----|
-| iframe test threw `invalid element state` | `#tinymce` is a `contenteditable` `<body>`, not a form field — WebDriver's "element clear" endpoint only supports actual inputs/textareas | Replaced `clearValue()` with click + `Ctrl+A` before typing |
-| Shadow DOM test got `Received length: 0` instead of 2 | `shadow$$` only queries **inside the shadow root's own template** — the `<li>` items are *slotted* (light DOM) content, which visually relocates into the shadow tree but isn't part of it | Changed `hosts[1].shadow$$('li')` to a plain `hosts[1].$$('li')`, which correctly reaches the host's light-DOM children |
+Attempt 3 is the most instructive failure in this whole portfolio: it didn't throw anything, it just silently did nothing and the assertion caught it — a good reminder that "no exception" is not the same as "it worked."
 
-The Shadow DOM bug is a genuinely instructive one: it's easy to assume "shadow DOM → always use `shadow$$`", but slotted/projected content specifically lives in the light DOM. Getting this wrong doesn't throw an error — it just silently returns 0 elements, which is exactly the "passes cleanly on an empty result" failure mode this portfolio's test-strategy doc warns against (see [`00-qa-strategy-and-leadership/test-strategy-master.md`](../00-qa-strategy-and-leadership/test-strategy-master.md)).
+Shadow DOM test (fixed in round 1, still holds): `shadow$$` only queries **inside the shadow root's own template** — the `<li>` items are *slotted* (light DOM) content, which visually relocates into the shadow tree but isn't part of it. Fixed via a plain `hosts[1].$$('li')`, which correctly reaches the host's light-DOM children.
+
+Both bugs are exactly the "passes cleanly with the wrong result" failure mode this portfolio's test-strategy doc warns against (see [`00-qa-strategy-and-leadership/test-strategy-master.md`](../00-qa-strategy-and-leadership/test-strategy-master.md)).
 
 See CI badge on the [root README](../README.md) for the current run.
 

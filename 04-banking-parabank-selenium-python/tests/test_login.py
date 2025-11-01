@@ -1,3 +1,7 @@
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
 from pages.login_page import LoginPage
 
 
@@ -9,7 +13,9 @@ def test_login_with_freshly_registered_account(driver, registered_user):
     login.open()
     login.login(registered_user["username"], registered_user["password"])
 
-    assert "Accounts Overview" in driver.page_source
+    # An instant page_source check here raced the redirect once already (see conftest.py's
+    # registered_user fixture, which hit the same class of bug) - wait for the real heading.
+    WebDriverWait(driver, 10).until(EC.text_to_be_present_in_element((By.TAG_NAME, "h1"), "Accounts Overview"))
 
 
 def test_login_with_invalid_password_is_rejected(driver, registered_user):

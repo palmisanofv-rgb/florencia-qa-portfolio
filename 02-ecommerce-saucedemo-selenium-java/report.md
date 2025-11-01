@@ -1,8 +1,15 @@
 # Test Report — Swag Labs (saucedemo.com)
 
-## Real CI run (GitHub Actions)
+## Real CI run (GitHub Actions) — 3 rounds to green
 
-First run: 6/9 tests passed, 3 failed on `#add-to-cart-sauce-labs-backpack` (`NoSuchElementException`). Root cause: the inventory page's add-to-cart buttons only carry a `data-test` attribute, not the matching `id` I'd assumed — fixed `InventoryPage.addToCartByProduct` to use `[data-test='...']` instead of `By.id`. All 6 login-account scenarios passed on the first try. See CI badge on the [root README](../README.md) for the current run.
+| Round | Result | Root cause found |
+|-------|--------|-------------------|
+| 1 | 6/9 passed | Add-to-cart buttons only carry `data-test`, not the `id` I'd assumed |
+| 2 | Still failing, same selector | Turned out to be a red herring — see round 3 |
+| 3 | 6/8 passed, checkout still failing | **The real bug:** `testng.xml`'s `parallel="methods" thread-count="3"` runs every `@Test` method on one shared TestNG instance, so two threads were typing into the *same* login form at once. A saved failure screenshot (added in this round via `BaseTest`'s new failure-artifact capture) showed the literal proof: `standard_userstandard_user` doubled up in the username field. Switched to sequential execution. |
+| 4 | 6/8 passed, checkout still failing | With the race gone, the *real* selector bug from round 1 was still there — but it wasn't the attribute name, it was that `inventory_item_name`'s `class` attribute has a **trailing space** (`class="inventory_item_name "`), which breaks an exact `@class='...'` XPath match. Confirmed directly from the saved page-source artifact. Switched to `[data-test='add-to-cart-<slug>']`, which the same artifact confirmed is present and correctly formatted. |
+
+The screenshot/page-source capture added to `BaseTest` in round 3 is what turned rounds 3–4 from more guessing into actually diagnosing the real problem — see [`00-qa-strategy-and-leadership/test-strategy-master.md`](../00-qa-strategy-and-leadership/test-strategy-master.md) for why this project treats "a passing suite that asserts the wrong thing" as worse than no suite; the inverse also holds for debugging a *failing* suite; guessing at fixes without evidence just burns cycles.
 
 ## Summary
 
