@@ -2,6 +2,10 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class CheckoutPage {
     private final WebDriver driver;
@@ -18,18 +22,27 @@ public class CheckoutPage {
         this.driver = driver;
     }
 
+    // React-controlled inputs: sendKeys() can return before React has processed the
+    // resulting onChange event and committed the value to its own state. Two earlier
+    // CI rounds both got bitten by that race (a JS-dispatched click that fired before
+    // React caught up, and - still, sometimes, with a plain click - fields showing up
+    // empty on submission). Waiting for the field's own `value` attribute to actually
+    // equal what was typed, before moving on, removes the race instead of guessing
+    // at how much of a gap a given click strategy happens to leave.
+    private void typeAndConfirm(By locator, String text) {
+        WebElement field = driver.findElement(locator);
+        if (text.isEmpty()) {
+            return; // nothing to confirm for an intentionally-blank field
+        }
+        field.sendKeys(text);
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(d -> text.equals(field.getDomProperty("value")));
+    }
+
     public void fillInformation(String first, String last, String zip) {
-        driver.findElement(firstName).sendKeys(first);
-        driver.findElement(lastName).sendKeys(last);
-        driver.findElement(postalCode).sendKeys(zip);
-        // A JS-dispatched click was tried here preemptively (it fixed a real
-        // navigation bug elsewhere - see CartPage.checkout()), but it fired the
-        // click synchronously, before React had processed the sendKeys' onChange
-        // events, submitting the form with all three fields still empty
-        // ("First Name is required" even though "Florencia" was sent). This button
-        // never actually had the click-doesn't-register problem, so a plain native
-        // click - which does leave enough of a gap for React to catch up - is both
-        // correct and simpler here.
+        typeAndConfirm(firstName, first);
+        typeAndConfirm(lastName, last);
+        typeAndConfirm(postalCode, zip);
         driver.findElement(continueButton).click();
     }
 
