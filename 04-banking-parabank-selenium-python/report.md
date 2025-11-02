@@ -13,7 +13,7 @@
 
 By round 7 this had become a recognizable pattern specific to this application, not four unrelated bugs: Parabank consistently renders a container element first and fills its text in a beat later (accounts table, new-account id, transfer confirmation). Once that pattern was recognized, later instances took one fix instead of a fresh round of guessing.
 
-Two real lessons here, both applicable beyond this one project: (1) an instant string-in-`page_source` check is not the same as a wait, and a passing test today can start failing tomorrow purely on timing; (2) a shared public demo instance can occasionally serve a bot-detection challenge instead of your actual page, which a resilient wait can ride out but a code fix alone cannot guarantee against every time.
+Two real lessons here, both applicable beyond this one project: (1) an instant string-in-`page_source` check is not the same as a wait, and a passing test today can start failing tomorrow purely on timing; (2) a shared public demo instance can occasionally serve a bot-detection challenge instead of your actual page, which a resilient wait can ride out but a code fix alone cannot guarantee against every time. On (2): the Cloudflare "Just a moment..." interstitial recurred in a later run (page title confirmed via the assertion's own diagnostic message), on a completely unrelated line of code — direct confirmation this is Parabank's shared infrastructure being occasionally cautious about CI traffic, not a defect in this suite.
 
 See CI badge on the [root README](../README.md) for the current run.
 

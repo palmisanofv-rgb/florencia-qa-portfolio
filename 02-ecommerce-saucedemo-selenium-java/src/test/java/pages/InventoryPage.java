@@ -4,7 +4,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,6 +52,14 @@ public class InventoryPage {
         return driver.findElements(cartBadge).isEmpty()
                 ? 0
                 : Integer.parseInt(driver.findElement(cartBadge).getText());
+    }
+
+    // React's state update after an add-to-cart click isn't guaranteed to have
+    // painted the badge by the time the very next command runs - waiting for the
+    // expected count directly avoids a flaky "expected 2 but found 1" on whichever
+    // click happened to land right before a re-render.
+    public void waitForCartBadgeCount(int expected) {
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> getCartBadgeCount() == expected);
     }
 
     public void goToCart() {

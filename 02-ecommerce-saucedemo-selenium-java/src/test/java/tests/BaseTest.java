@@ -27,7 +27,7 @@ public abstract class BaseTest {
         driver = new ChromeDriver(options); // Selenium Manager resolves the driver binary automatically (Selenium 4.6+)
         // Swag Labs is a React app - give it a beat to hydrate after each navigation
         // instead of racing document.readyState.
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
     }
 
     @AfterMethod

@@ -17,8 +17,9 @@ public class CheckoutTests extends BaseTest {
 
         InventoryPage inventory = new InventoryPage(driver);
         inventory.addToCartByProductName("Sauce Labs Backpack");
+        inventory.waitForCartBadgeCount(1);
         inventory.addToCartByProductName("Sauce Labs Bike Light");
-        Assert.assertEquals(inventory.getCartBadgeCount(), 2);
+        inventory.waitForCartBadgeCount(2);
 
         inventory.goToCart();
         CartPage cart = new CartPage(driver);

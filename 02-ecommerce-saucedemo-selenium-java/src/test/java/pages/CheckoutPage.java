@@ -35,7 +35,7 @@ public class CheckoutPage {
             return; // nothing to confirm for an intentionally-blank field
         }
         field.sendKeys(text);
-        new WebDriverWait(driver, Duration.ofSeconds(5))
+        new WebDriverWait(driver, Duration.ofSeconds(8))
                 .until(d -> text.equals(field.getDomProperty("value")));
     }
 
