@@ -15,6 +15,16 @@ Full-lifecycle QA project against a live public e-commerce sandbox: account mana
 
 See [`00-qa-strategy-and-leadership`](../00-qa-strategy-and-leadership) for how this project fits into the overall tool/strategy matrix.
 
+## Evidence
+
+Real screenshots captured by Playwright during a GitHub Actions run against the live site (not mockups — see `automation-playwright/tests/evidence.spec.ts`):
+
+![automationexercise.com home page](evidence/01-home.png)
+*Home page, captured mid-CI-run.*
+
+![Search results for "Dress"](evidence/02-search-results.png)
+*Search results page — confirms the search feature returns real, matching products.*
+
 ## Real CI run (GitHub Actions)
 
 First run: 7/8 Playwright tests passed on the first try; 1 failed on a genuine bug — `cart.spec.ts` hit a Playwright "strict mode violation" because product id 1's "Add to cart" link appears **twice** in the DOM on automationexercise.com's product listing (a hover overlay + a static link). Fixed by adding `.first()` to `ProductsPage.addToCartByProductId`.
