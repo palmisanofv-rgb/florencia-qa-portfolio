@@ -6,16 +6,16 @@ import { ProductsPage } from '../pages/ProductsPage';
 // screenshot from a CI run against automationexercise.com, not a mockup.
 test('capture evidence screenshots for the README', async ({ page }) => {
   await page.goto('/');
-  await page.screenshot({ path: '../../evidence/01-home.png', fullPage: false });
+  await page.screenshot({ path: '../evidence/01-home.png', fullPage: false });
 
   const products = new ProductsPage(page);
   await products.goto();
   await products.search('Dress');
-  await page.screenshot({ path: '../../evidence/02-search-results.png', fullPage: false });
+  await page.screenshot({ path: '../evidence/02-search-results.png', fullPage: false });
 
   await products.goto();
   await products.addToCartByProductId(1).click();
   await products.continueShopping();
   await page.getByText('View Cart').click();
-  await page.screenshot({ path: '../../evidence/03-cart.png', fullPage: false });
+  await page.screenshot({ path: '../evidence/03-cart.png', fullPage: false });
 });
