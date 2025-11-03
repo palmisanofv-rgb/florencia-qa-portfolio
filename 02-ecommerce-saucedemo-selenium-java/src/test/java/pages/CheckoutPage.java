@@ -1,9 +1,7 @@
 package pages;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 public class CheckoutPage {
     private final WebDriver driver;
@@ -20,18 +18,19 @@ public class CheckoutPage {
         this.driver = driver;
     }
 
-    // Same JS-dispatched click as CartPage.checkout() and InventoryPage.goToCart() -
-    // native clicks on this app's step-transition buttons weren't reliably
-    // registering as real navigation in CI.
-    private void jsClick(WebElement element) {
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
-    }
-
     public void fillInformation(String first, String last, String zip) {
         driver.findElement(firstName).sendKeys(first);
         driver.findElement(lastName).sendKeys(last);
         driver.findElement(postalCode).sendKeys(zip);
-        jsClick(driver.findElement(continueButton));
+        // A JS-dispatched click was tried here preemptively (it fixed a real
+        // navigation bug elsewhere - see CartPage.checkout()), but it fired the
+        // click synchronously, before React had processed the sendKeys' onChange
+        // events, submitting the form with all three fields still empty
+        // ("First Name is required" even though "Florencia" was sent). This button
+        // never actually had the click-doesn't-register problem, so a plain native
+        // click - which does leave enough of a gap for React to catch up - is both
+        // correct and simpler here.
+        driver.findElement(continueButton).click();
     }
 
     public String getErrorMessage() {
@@ -43,7 +42,7 @@ public class CheckoutPage {
     }
 
     public void finish() {
-        jsClick(driver.findElement(finishButton));
+        driver.findElement(finishButton).click();
     }
 
     public String getCompleteHeader() {
