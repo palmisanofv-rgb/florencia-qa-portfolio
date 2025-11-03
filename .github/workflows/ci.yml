@@ -7,9 +7,215 @@ on:
   workflow_dispatch:
 
 jobs:
-  placeholder:
-    name: Portfolio under restructure - CI being rebuilt per project
+  playwright-01:
+    name: "01 automationexercise - Playwright"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 01-ecommerce-automationexercise/03-automation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: playwright-01-report, path: 01-ecommerce-automationexercise/03-automation/playwright-report/, retention-days: 14 }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: evidence-01, path: 01-ecommerce-automationexercise/06-evidence/, retention-days: 14 }
+
+  postman-01:
+    name: "01 automationexercise - API"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: echo "CI is being rewired project-by-project as the 7-folder structure lands. See commit history."
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install -g newman
+      - run: |
+          newman run 01-ecommerce-automationexercise/04-security-api/postman/AutomationExercise-API.postman_collection.json \
+            -e 01-ecommerce-automationexercise/04-security-api/postman/AutomationExercise-API.postman_environment.json
+
+  playwright-02:
+    name: "02 saucedemo - Playwright"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 02-ecommerce-saucedemo/03-automation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: evidence-02, path: 02-ecommerce-saucedemo/06-evidence/, retention-days: 14 }
+
+  selenium-03:
+    name: "03 CURA Healthcare - Selenium Java"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 03-healthcare-cura/03-automation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - run: mvn -B test
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with: { name: selenium-03-failure-artifacts, path: 03-healthcare-cura/03-automation/target/failure-artifacts/, retention-days: 14 }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: evidence-03, path: 03-healthcare-cura/06-evidence/, retention-days: 14 }
+
+  selenium-04-and-sql:
+    name: "04 Parabank - Selenium Python + SQL"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 04-banking-parabank/03-automation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -r requirements.txt
+      - run: pytest -v
+      - name: Local SQL data-validation companion
+        run: |
+          cd ../04-security-api/data-validation
+          sqlite3 parabank_mock.db < schema.sql
+          sqlite3 parabank_mock.db < reconciliation-queries.sql
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: evidence-04, path: 04-banking-parabank/06-evidence/, retention-days: 14 }
+
+  postman-04:
+    name: "04 Parabank - API"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install -g newman
+      - run: newman run 04-banking-parabank/04-security-api/postman/Parabank-API.postman_collection.json
+
+  playwright-05:
+    name: "05 BlazeDemo - Playwright"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 05-travel-blazedemo/03-automation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: evidence-05, path: 05-travel-blazedemo/06-evidence/, retention-days: 14 }
+
+  jmeter-05:
+    name: "05 BlazeDemo - JMeter"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - run: |
+          wget -q https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.6.3.tgz
+          tar -xzf apache-jmeter-5.6.3.tgz
+      - run: |
+          ./apache-jmeter-5.6.3/bin/jmeter -n \
+            -t 05-travel-blazedemo/05-performance/jmeter/BlazeDemo-LoadTest.jmx \
+            -l results.jtl -j jmeter.log
+      - run: |
+          if grep -q ',false,' results.jtl; then echo "Failed samples:"; cat jmeter.log; exit 1; fi
+          echo "All samplers passed."
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: jmeter-05-results, path: "results.jtl", retention-days: 14 }
+
+  selenium-06:
+    name: "06 Legacy tools - Selenium Python"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 06-legacy-tools-theinternet/03-automation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -r requirements.txt
+      - run: pytest -v
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: evidence-06, path: 06-legacy-tools-theinternet/06-evidence/, retention-days: 14 }
+
+  playwright-07:
+    name: "07 OrangeHRM - Playwright"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 07-hr-orangehrm/03-automation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: evidence-07, path: 07-hr-orangehrm/06-evidence/, retention-days: 14 }
+
+  playwright-08:
+    name: "08 DemoBlaze - Playwright"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 08-ecommerce-demoblaze/03-automation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: evidence-08, path: 08-ecommerce-demoblaze/06-evidence/, retention-days: 14 }
+
+  postman-08:
+    name: "08 DemoBlaze - API"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install -g newman
+      - run: newman run 08-ecommerce-demoblaze/04-security-api/postman/DemoBlaze-API.postman_collection.json
+
+  playwright-10:
+    name: "10 TodoMVC - Playwright"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 10-productivity-todomvc/03-automation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: evidence-10, path: 10-productivity-todomvc/06-evidence/, retention-days: 14 }
