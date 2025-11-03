@@ -11,8 +11,18 @@ This project intentionally uses **Java + TestNG** (the classic enterprise Seleni
 - [`test-plan.md`](test-plan.md) — scope and the seeded-bug accounts strategy
 - `src/test/java/pages/` — Page Object Model (LoginPage, InventoryPage, CartPage, CheckoutPage)
 - `src/test/java/tests/` — TestNG test classes
-- `testng.xml` — suite definition (used for parallel/cross-account runs)
-- [`report.md`](report.md) — results, including the intentionally-seeded defects found on `problem_user`
+- `testng.xml` — suite definition (sequential — see [`report.md`](report.md) for why parallel execution was reverted)
+- [`report.md`](report.md) — results, including the intentionally-seeded defects found on `problem_user`, and a 10-round log of real bugs this suite hit and fixed against the live site
+
+## Evidence
+
+Real screenshots captured during a GitHub Actions run against the live site (not mockups):
+
+![Swag Labs product catalog](evidence/01-products-page.png)
+*Product catalog — `standard_user` view, all 6 seeded products rendering correctly.*
+
+![Swag Labs cart page](evidence/02-cart-page.png)
+*Cart page after adding two products — correct names, prices and quantities.*
 
 ## Running
 

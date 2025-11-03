@@ -45,6 +45,12 @@ jobs:
           name: playwright-report
           path: 01-ecommerce-automationexercise/automation-playwright/playwright-report/
           retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-evidence-screenshots
+          path: 01-ecommerce-automationexercise/evidence/
+          retention-days: 14
 
   selenium-java:
     name: UI automation (Selenium + Java) - Project 02

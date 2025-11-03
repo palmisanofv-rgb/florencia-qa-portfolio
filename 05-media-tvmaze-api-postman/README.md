@@ -17,3 +17,21 @@ newman run postman/TVMaze-API.postman_collection.json
 ```
 
 No API key or environment file needed — every endpoint is public.
+
+## Evidence
+
+Real Newman output from a GitHub Actions run against the live API (see the CI badge on the [root README](../README.md) for the current run):
+
+```
+┌─────────────────────────┬────────────────────┬────────────────────┐
+│                         │            executed │             failed │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│              iterations │                  1 │                  0 │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│                requests │                  6 │                  0 │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│              assertions │                 19 │                  0 │
+├─────────────────────────┴────────────────────┴────────────────────┤
+│ total run duration: 982ms                                         │
+└─────────────────────────────────────────────────────────────────────┘
+```

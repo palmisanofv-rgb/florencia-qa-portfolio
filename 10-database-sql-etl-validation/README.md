@@ -24,3 +24,26 @@ sqlite3 warehouse.db < validation/referential_integrity_checks.sql
 sqlite3 warehouse.db < validation/data_quality_checks.sql
 sqlite3 warehouse.db < validation/business_rule_checks.sql
 ```
+
+## Evidence
+
+Real output from a GitHub Actions run (see the CI badge on the [root README](../README.md) for the current run):
+
+```
+--- Row-count reconciliation (expected: clean) ---
+check_name                 source_count  warehouse_count  diff
+-------------------------  ------------  ---------------  ----
+customers vs dim_customer  5             5                0
+orders vs fact_orders      8             8                0
+
+--- Business rule checks (expected: the seeded order_id=5 discrepancy) ---
+order_id  expected_revenue  warehouse_revenue  drift
+--------  ----------------  -----------------  -----
+5         50.0              12.5               -37.5
+
+source_total_revenue  warehouse_total_revenue
+--------------------  -----------------------
+400.5                 363.0
+```
+
+Row counts are perfectly clean — and the revenue totals still don't match. That's the entire point of this project: a row-count check alone would have called this ETL job healthy.

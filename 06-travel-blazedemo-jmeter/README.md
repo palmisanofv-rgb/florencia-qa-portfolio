@@ -19,3 +19,13 @@ This is a **light smoke/capability test**, not a stress test: 5 virtual users, 2
 ```bash
 jmeter -n -t jmeter/BlazeDemo-LoadTest.jmx -l results.jtl -e -o report-html/
 ```
+
+## Evidence
+
+Real JMeter summary line from a GitHub Actions run against the live site (see the CI badge on the [root README](../README.md) for the current run):
+
+```
+summary =     40 in 00:00:14 =    3.0/s Avg:   190 Min:   157 Max:   376 Err:     0 (0.00%)
+```
+
+40 samples (5 users × 2 iterations × 4 requests), zero errors, 190ms average response time — comfortably under the 3s NFR threshold in [`test-plan.md`](test-plan.md).
