@@ -1,1 +1,0 @@
-QA portfolio file-upload fixture — used by test/specs/file-upload.spec.js

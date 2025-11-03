@@ -26,6 +26,6 @@ What a QA Lead reports upward isn't "tests passed" — it's whether quality risk
 | **Flakiness rate** | % of test runs that fail intermittently with no real defect | Flaky tests erode trust in the suite faster than missing coverage does — worth tracking and fixing as its own backlog item |
 | **Maintenance cost per test** | Time spent updating tests per release vs. time spent writing new ones | If maintenance dominates, it's a signal to invest in better abstractions (Page Object Model, object repositories) rather than more tests |
 
-## Why this belongs in a QA Team Management portfolio, not just an engineer's
+## Why this belongs in a Test Management portfolio, not just an engineer's
 
-Any individual contributor can report "tests passed." What a QA Lead adds is the judgment to say *which* of these numbers matters this sprint, and to make a resourcing case (more automation here, more exploratory testing there, accept this risk for now) based on them — which is the skill this folder is meant to demonstrate on top of the 10 hands-on projects.
+Any individual contributor can report "tests passed." What a test manager adds is the judgment to say *which* of these numbers matters this sprint, and to make a resourcing case (more automation here, more exploratory testing there, accept this risk for now) based on them — the exact skill ISTQB's CTAL-TM syllabus calls out (test progress monitoring and control, risk-based reporting to stakeholders), and what this folder is meant to demonstrate on top of the 10 hands-on projects.
