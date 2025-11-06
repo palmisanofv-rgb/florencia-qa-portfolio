@@ -64,12 +64,22 @@ test('a new customer registers, searches, builds a cart, and the totals are corr
     expect(totalNum).toBeCloseTo(priceNum * qtyNum, 2);
   }
 
-  // TC-09: quantity set on the detail page carries through to the cart
-  await page.goto('/product_details/1');
+  // TC-09: quantity set on the detail page carries through to the cart.
+  // Uses product id 3 (not 1 or 2, both already in the cart from TC-08 above
+  // at quantity 1) - reusing product 1 here stacks to a real quantity of 5,
+  // not 4, which is exactly the kind of bug this consolidated E2E test is
+  // supposed to catch, not accidentally trigger itself.
+  await page.goto('/product_details/3');
   await page.locator('#quantity').fill('4');
   await page.locator('button.cart').click();
   await page.getByText('View Cart').click();
-  const quantityCell = cart.cartItems.first().locator('.cart_quantity button');
+  await expect(cart.cartItems).toHaveCount(3);
+  // Confirmed via a real CI failure: filtering rows by hasText '4' is not
+  // unique - it also matches whichever other row's price/total happens to
+  // contain the digit "4" anywhere (e.g. "Rs. 400"), a strict-mode violation
+  // with 2 elements. Product 3 was the last one added, so it's reliably the
+  // last cart row rather than something matched by incidental text content.
+  const quantityCell = cart.cartItems.last().locator('.cart_quantity button');
   await expect(quantityCell).toHaveText('4');
 
   // Teardown - this is a shared public sandbox, never leave test accounts behind
