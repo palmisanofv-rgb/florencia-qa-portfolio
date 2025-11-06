@@ -1,32 +1,30 @@
-# Project 01 — E-commerce Web | [automationexercise.com](https://automationexercise.com)
+# Project 01 — E-commerce | [automationexercise.com](https://automationexercise.com)
 
-**Domain:** E-commerce | **Primary tools:** Playwright (TypeScript) + Postman/Newman | **Lifecycle coverage:** Planning → Manual → Automation → API
+**Domain:** E-commerce | **Primary tool:** Playwright (TypeScript) | **Legacy system?** No — modern server-rendered app
 
-Full-lifecycle QA project against a live public e-commerce sandbox: account management, catalog, cart, checkout, and its REST API.
+Full-lifecycle QA project against a live public e-commerce sandbox, following this portfolio's standard 7-folder shape (see [`00-qa-strategy-and-leadership/project-template.md`](../00-qa-strategy-and-leadership/project-template.md)).
 
 ## Contents
 
-| Stage | File/Folder |
-|-------|-------------|
-| Test planning | [`test-plan.md`](test-plan.md) — scope, risk analysis, strategy, entry/exit criteria |
-| Manual testing | [`manual-testing/test-cases.md`](manual-testing/test-cases.md) — 12 test cases + 26-scenario traceability matrix, [`manual-testing/bug-report-sample.md`](manual-testing/bug-report-sample.md) |
-| UI automation | [`automation-playwright/`](automation-playwright) — Playwright + TypeScript, Page Object Model |
-| API automation | [`api-testing-postman/`](api-testing-postman) — Postman collection, 14/14 documented scenarios |
-
-See [`00-qa-strategy-and-leadership`](../00-qa-strategy-and-leadership) for how this project fits into the overall tool/strategy matrix.
+| Folder | What's in it |
+|--------|--------------|
+| [`01-planning-strategy`](01-planning-strategy) | Business value & risk analysis, direction/scope decisions, test plan |
+| [`02-test-cases`](02-test-cases) | 12 test cases (CSV, Excel-readable) + full 26-scenario traceability matrix |
+| [`03-automation`](03-automation) | 2 real Playwright E2E flows (purchase journey, login security boundary) |
+| [`04-security-api`](04-security-api) | Postman collection (14/14 API scenarios) + basic security checks (3 findings) |
+| [`05-performance`](05-performance) | k6 smoke test on the 2 highest-traffic API endpoints |
+| [`06-evidence`](06-evidence) | Real screenshots, one per test case |
+| [`07-reports`](07-reports) | Sprint report + final report |
 
 ## Evidence
 
-Real screenshots captured by Playwright during a GitHub Actions run against the live site (not mockups — see `automation-playwright/tests/evidence.spec.ts`):
-
-![automationexercise.com home page](evidence/01-home.png)
+![automationexercise.com home page](06-evidence/home-page.png)
 *Home page, captured mid-CI-run.*
 
-![Search results for "Dress"](evidence/02-search-results.png)
-*Search results page — confirms the search feature returns real, matching products.*
+![Search results for "Dress"](06-evidence/tc07-search-results.png)
+*Search results — confirms the search feature returns real, matching products.*
 
-## Real CI run (GitHub Actions)
+## Real CI findings
 
-First run: 7/8 Playwright tests passed on the first try; 1 failed on a genuine bug — `cart.spec.ts` hit a Playwright "strict mode violation" because product id 1's "Add to cart" link appears **twice** in the DOM on automationexercise.com's product listing (a hover overlay + a static link). Fixed by adding `.first()` to `ProductsPage.addToCartByProductId`.
-
-**Known intermittent failure mode (infrastructure, not code):** on some runs, all 8 tests time out against a "Please wait while your request is being verified..." interstitial — a bot-protection challenge that automationexercise.com (or its CDN) occasionally serves to traffic from GitHub Actions' well-known runner IP ranges. Confirmed via the saved Playwright screenshot artifact, not assumed. This is a real, common limitation of running browser automation against a public third-party site from shared cloud CI IPs rather than a residential/allow-listed one — the same suite passes reliably when the challenge doesn't trigger (see the CI badge on the [root README](../README.md) for the current run's actual outcome).
+- **Real bug found & fixed:** product id 1's "Add to cart" link renders **twice** in the DOM (hover overlay + static link) — caused a Playwright strict-mode violation, fixed with `.first()`. See [`07-reports/sprint-01-report.md`](07-reports/sprint-01-report.md).
+- **Known intermittent failure mode (infrastructure, not code):** automationexercise.com occasionally serves a bot-protection challenge to GitHub Actions' runner IPs. Confirmed via a saved screenshot, not assumed — see the CI badge on the [root README](../README.md) for the current run's actual outcome.
