@@ -1,6 +1,8 @@
 # Per-Project Folder Template
 
-Every numbered project (01–10) follows this exact shape, so the *process* is identical even as the *product under test* changes — the same discipline a test manager would enforce across a real team's projects.
+**Author:** Florencia Palmisano
+
+Every numbered project (01–10) follows this exact shape, so the *process* is identical even as the *product under test* changes — the same discipline I'd enforce across a real team's projects, so that a new hire dropped into project 07 already knows where to look because they've seen project 02.
 
 ```
 0X-domain-sitename/
@@ -26,4 +28,6 @@ Every numbered project (01–10) follows this exact shape, so the *process* is i
 
 ## Why this shape, not "one folder per discipline" (the old structure)
 
-The previous version of this portfolio organized by *discipline* (all manual testing across every site in one folder, all API testing in another). That's a reasonable way to show tool breadth, but it doesn't read the way a real project does: a stakeholder asking "where do things stand on the Parabank effort" wants one place to look, not four. Organizing by *project* instead means each folder is a self-contained artifact you could hand to a manager or a new team member and say "this is everything on this initiative."
+An earlier version of this portfolio organized by *discipline* — all manual testing across every site in one folder, all API testing in another. That's a reasonable way to show tool breadth on its own, but it doesn't read the way a real project does: if a product owner asks "where do things stand on the Parabank effort," they want one place to look, not four separate folders to cross-reference. I rebuilt the whole portfolio around *project* instead, so each folder is a self-contained artifact I could hand to a manager or a new team member on day one and say "this is everything on this initiative, front to back."
+
+The 7-folder order itself is also deliberate, not alphabetical: strategy and planning come before a single test case is written, because I don't want a test suite that reflects "whatever occurred to me first" instead of a documented risk assessment; evidence and reports come last because they're the output of the work above them, not an input to it.
