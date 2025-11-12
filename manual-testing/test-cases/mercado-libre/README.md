@@ -27,4 +27,4 @@ Cualquier falla aquí impacta directamente en las ventas y la experiencia del us
 - Funcionalidad core 100% operativa
 
 ## 📊 Archivos
-- [casos-mercado-libre.xlsx](./casos-mercado-libre.xlsx) - Matriz de testing del customer path
+- [Test Cases - Mercado Libre - Access Suit.xlsx](./Test%20Cases%20-%20Mercado%20Libre%20-%20Access%20Suit.xlsx) - Matriz de testing del customer path
