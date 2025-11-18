@@ -1,7 +1,7 @@
 # Security & API Testing
 
 - [`postman/`](postman) — Postman collection covering all 8 endpoints / 14 documented scenarios of automationexercise's public API (account lifecycle, products, search, login verification)
-- [`security-checks.md`](security-checks.md) — basic security testing: response headers, injection/XSS probes, auth boundary, error verbosity — with 3 real findings
+- [`security-checks.md`](security-checks.md) — basic security testing: response headers, injection/XSS probes, auth boundary, error verbosity — with 3 real findings, plus 3 real accessibility findings folded in from the portfolio-wide spot-check
 
 ## Running the API collection
 

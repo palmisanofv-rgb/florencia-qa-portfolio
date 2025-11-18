@@ -35,3 +35,15 @@ Lightweight, non-intrusive security checks appropriate for a public sandbox (no 
 ## Disposition
 
 All three findings are low-severity/informational and are exactly the kind of thing a security-aware QA function should flag even without a dedicated pentest — none of them are exploited or exploitable on their own in this check, they're reported as **hardening recommendations**, which is the right disposition for findings of this severity.
+
+## Accessibility findings
+
+A separate, lightweight AI-assisted accessibility spot-check (alt text, contrast, keyboard reachability) was run against the homepage — see [`../03-automation/accessibility-check.md`](../03-automation/accessibility-check.md) for the full methodology and exact numbers. Summary:
+
+| Finding | Severity | Status |
+|---------|----------|--------|
+| ~40 of 44 product images share one generic, non-descriptive `alt` string ("ecommerce website products") | Medium | Reported, not fixed (third-party site) |
+| "Add to cart" CTA not reachable within 15 keyboard Tab presses from a fresh page load | Medium-High | Reported, not fixed (third-party site) |
+| No visible keyboard-focus indicator across any of the 15 tab stops checked | Medium | Reported, not fixed (third-party site) |
+
+Contrast on the one CTA checked (5.15:1) passed comfortably — not every dimension of this spot-check turned up an issue. This is tracked at the portfolio level as [`risk-register.md`](../../00-qa-strategy-and-leadership/risk-register.md) R-29 and R-30, and as an open coverage gap in [`roadmap.md`](../../00-qa-strategy-and-leadership/roadmap.md).
