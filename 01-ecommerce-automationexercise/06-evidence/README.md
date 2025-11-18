@@ -1,6 +1,6 @@
 # Evidence
 
-Real screenshots captured by Playwright during GitHub Actions runs against the live site — one per test case in [`../02-test-cases/test-cases.csv`](../02-test-cases/test-cases.csv), not a curated sample. Captured by [`../03-automation/tests/evidence.spec.ts`](../03-automation/tests/evidence.spec.ts).
+Real screenshots captured by Playwright against the live site — one per automated test case in [`../02-test-cases/test-cases.csv`](../02-test-cases/test-cases.csv), not a curated sample. Captured by [`../03-automation/tests/evidence.spec.ts`](../03-automation/tests/evidence.spec.ts).
 
 | File | Test Case |
 |------|-----------|
@@ -14,5 +14,14 @@ Real screenshots captured by Playwright during GitHub Actions runs against the l
 | `tc07-search-results.png` | TC-07 Search Product |
 | `tc08-cart-with-two-products.png` | TC-08 Add Products to Cart |
 | `tc09-quantity-set-to-4.png` | TC-09 Verify product quantity |
+| `tc13-test-cases-page.png` | TC-13 Test Cases page |
+| `tc14-product-detail-page.png` | TC-14 Product detail page |
+| `tc15-subscribe-home-success.png` | TC-15 Subscribe (home page) |
+| `tc16-subscribe-cart-success.png` | TC-16 Subscribe (cart page) |
+| `tc18-category-dress-products.png` | TC-18 Category navigation |
+| `tc19-brand-polo-products.png` | TC-19 Brand navigation |
+| `tc20-cart-persists-after-login.png` | TC-20 Cart persists across login |
+| `tc21-review-submitted.png` | TC-21 Product review — captured mid-run with a real Google Vignette ad interstitial covering the form (see [`../07-reports/sprint-02-report.md`](../07-reports/sprint-02-report.md)) |
+| `tc22-recommended-item-in-cart.png` | TC-22 Recommended items add-to-cart |
 
-TC-04/05/06/09's screenshots are pending the next CI run that completes the full evidence step (see [`../07-reports`](../07-reports) for status) — `home-page.png` and `tc07-search-results.png` are already captured and real.
+All 20 files above are real, captured live against the production site (most recently during this project's sprint 02 deepening pass). Test cases without a screenshot here (TC-10/11/12/17/23/24/25/26) are the ones intentionally kept manual — see [`../07-reports/final-report.md`](../07-reports/final-report.md) for why each one.
