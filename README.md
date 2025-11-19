@@ -1,4 +1,4 @@
-# 👋 Hi, I'm Florencia
+# Hi, I'm Florencia
 
 **QA Engineer | ISTQB Certified (Foundation + AI + GenAI) | Manual, Automation & Test Strategy**
 
@@ -8,7 +8,7 @@ This is my personal QA engineering lab — a place to practice and document full
 
 ---
 
-## 🎓 Certifications & Study
+## Certifications & Study
 
 ![ISTQB](https://img.shields.io/badge/ISTQB-Foundation-0052CC?style=for-the-badge)
 ![ISTQB](https://img.shields.io/badge/ISTQB-AI_Testing-2EAD33?style=for-the-badge)
@@ -22,27 +22,27 @@ This is my personal QA engineering lab — a place to practice and document full
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
-### 🤖 Automation
+### Automation
 ![Playwright](https://img.shields.io/badge/Playwright-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)
 ![Selenium](https://img.shields.io/badge/Selenium-43B02A?style=for-the-badge&logo=selenium&logoColor=white)
 ![Appium](https://img.shields.io/badge/Appium-662D91?style=for-the-badge&logo=appium&logoColor=white)
 
-### 🔧 API, Security & Performance
+### API, Security & Performance
 ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
 ![k6](https://img.shields.io/badge/k6-7D64FF?style=for-the-badge&logo=k6&logoColor=white)
 ![JMeter](https://img.shields.io/badge/JMeter-D22128?style=for-the-badge&logo=apachejmeter&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 
-### 📋 Management & Methodologies
+### Management & Methodologies
 ![Jira](https://img.shields.io/badge/Jira-0052CC?style=for-the-badge&logo=jira&logoColor=white)
 ![TestRail](https://img.shields.io/badge/TestRail-65C179?style=for-the-badge)
 ![Agile](https://img.shields.io/badge/Agile/Scrum-0096D6?style=for-the-badge)
 
 ---
 
-## 📁 Portfolio Structure
+## Portfolio Structure
 
 Every project runs against a real, public, legally-testable sandbox (official vendor demo apps, or free developer APIs) — nothing here targets a real company's production system without authorization. Every project follows the **same 7-folder shape**, so the *process* stays consistent even as the *domain* changes:
 
@@ -72,7 +72,7 @@ Every project runs against a real, public, legally-testable sandbox (official ve
 
 ---
 
-## 🎯 My Quality Approach
+## My Quality Approach
 
 - **Risk-based testing** — every project's strategy starts with business value and risk, not a feature checklist
 - **Tool fit over tool preference** — Playwright day-to-day, Selenium WebDriver on legacy-style stacks, Appium for mobile (see [tool selection matrix](00-qa-strategy-and-leadership/tool-tech-matrix.md))
