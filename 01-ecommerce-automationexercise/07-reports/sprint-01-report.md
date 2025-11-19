@@ -29,6 +29,6 @@ A second, related symptom surfaced later: two separate CI runs failed with `Exce
 
 | Metric | Value |
 |--------|-------|
-| P1 scenario automation ratio | 6/8 |
+| P1 scenario automation ratio | 5/7 |
 | API scenario coverage | 14/14 |
 | Open defects | 0 (both findings this sprint are hardening recommendations, not defects blocking release) |

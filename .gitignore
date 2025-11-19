@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+blob-report/
+
+# Java/Maven (Selenium projects)
+target/
+
+# Python (Selenium projects)
+__pycache__/
+*.pyc
+.pytest_cache/
+venv/
+.venv/
+
+# k6
+*.summary.json
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local env files
+.env
+.env.local
