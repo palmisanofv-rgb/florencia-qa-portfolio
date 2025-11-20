@@ -6,7 +6,7 @@
 
 ## 1. Purpose
 
-This document is the strategy I apply across every project in this portfolio, written the way I'd write it for a real team: one philosophy, adapted per domain, not ten disconnected test plans that happen to share a folder structure. If you're reviewing this portfolio as a hiring manager, this is the document that should tell you how I think about testing before you look at a single line of automation code.
+This document is the strategy I apply across every project in this portfolio, written the way I'd write it for a real team: one philosophy, adapted per domain, not ten disconnected test plans that happen to share a folder structure. It's meant to lay out how I think about testing before anyone looks at a single line of automation code — the reasoning behind the decisions, not just the decisions themselves.
 
 Each of the 10 projects has its own `01-planning-strategy/test-strategy.md` that applies these principles to that specific product. This document is the layer above that: the reasoning a test manager owns across a whole program, not just one project.
 

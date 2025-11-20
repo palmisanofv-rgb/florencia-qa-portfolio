@@ -13,7 +13,6 @@ I don't send the same report to everyone — a business stakeholder and an engin
 | **Product / business stakeholders** | Is quality risk trending the right direction? Is there anything that should delay a release? | 3-5 line summary: coverage %, open risk count by severity, one plain-language line per Critical/High item | End of sprint + immediately for anything Critical |
 | **Engineering leads / developers** | Exactly what broke, how to reproduce it, and whether it's their code or the test | Full bug report format (severity, repro steps, expected vs. actual, suggested fix) — see [Project 01's template](../01-ecommerce-automationexercise/02-test-cases/bug-report-sample.md) | As found, plus rolled up in the sprint report |
 | **Other testers / future team members** | How the suite is organized, what's already covered, what's deliberately not covered and why | This 00 folder + each project's `test-strategy.md` and `07-reports/` | Living documentation, not a point-in-time report |
-| **A hiring manager or reviewer of this portfolio** | Can this person reason about risk, not just write scripts? | This entire folder, read top to bottom, starting with the [README](README.md) | Once, but it has to hold up under close reading |
 
 ## 2. Reporting cadence
 

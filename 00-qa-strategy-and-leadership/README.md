@@ -1,10 +1,10 @@
 # 00 — QA Strategy & Leadership
 
-**Start here if you're reviewing this portfolio as a hiring manager, QA lead, or future teammate.**
-
 The other 10 projects are execution: hands-on testing across 10 domains, each with its own strategy, test cases, automation, security/API checks, performance testing, evidence, and reports. This folder is the layer above that — the thinking I apply as a test manager to turn 10 individual projects into one coherent quality program: how I assess value and risk per product, why I chose a given tool over another, what actually broke and how I found it, and what I'd report upward and to whom.
 
 It's built around the ISTQB **CTAL-TM (Certified Tester Advanced Level Test Management)** syllabus, but it isn't written as a syllabus summary — every claim below is backed by a real decision or a real finding from one of the 10 projects, not a generic best-practice statement. If a sentence here doesn't point to a specific project number, I've tried to cut it.
+
+If you're new to this repo, [`test-strategy-master.md`](test-strategy-master.md) is the one to read first — everything else in this folder supports a claim made there.
 
 ## How to read this folder
 
@@ -34,6 +34,6 @@ Every project shares the same 7-folder shape (`01-planning-strategy`, `02-test-c
 | 09 | [Mobile (Appium sample app)](../09-mobile-appium) | Mobile | Appium |
 | 10 | [TodoMVC](../10-productivity-todomvc) | Productivity/SaaS | Playwright |
 
-## What I'd want you to take away from this folder
+## What this folder is really about
 
-Ten green checkmarks don't tell you much about how someone thinks. What I'd rather you notice: I score risk before I write a test case, and I can show you three findings that came directly from that scoring, not from luck ([`risk-register.md`](risk-register.md)). I've changed tools mid-project when the evidence said the first choice was wrong, and I kept the record of *why* ([`tool-tech-matrix.md`](tool-tech-matrix.md)). And when something couldn't be verified — Project 09's mobile suite, run without a real device available — I said so directly instead of letting a green folder imply otherwise. That last one is the habit I'd want a team to trust me on most.
+Ten green checkmarks don't say much about how someone thinks. What matters more to me: I score risk before writing a test case, and this folder can point to three findings that came directly from that scoring, not from luck ([`risk-register.md`](risk-register.md)). I've changed tools mid-project when the evidence said the first choice was wrong, and kept the record of *why* instead of quietly rewriting history ([`tool-tech-matrix.md`](tool-tech-matrix.md)). And when something couldn't be verified — Project 09's mobile suite, written without a real device available to run it against — that gets said directly instead of letting a green folder imply otherwise. That habit, more than any of the tools, is the one I care most about keeping.

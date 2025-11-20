@@ -14,7 +14,7 @@ Before picking a tool for a project, I weigh five factors against each other rat
 | **Team skill fit & hiring pool** | Who can maintain this six months from now, and how easily could a new hire ramp up? |
 | **CI portability** | Can this run headless, unattended, on every push, without a GUI or manual license step? |
 | **Maintenance cost** | How much of the suite's future time goes into fighting the tool itself vs. writing new coverage? |
-| **Reviewability** | Can a hiring manager or teammate meaningfully review this in a plain-text git diff? |
+| **Reviewability** | Can a teammate meaningfully review this in a plain-text git diff? |
 
 ## 2. The matrix
 
