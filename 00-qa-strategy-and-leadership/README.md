@@ -2,7 +2,7 @@
 
 The other 10 projects are execution: hands-on testing across 10 domains, each with its own strategy, test cases, automation, security/API checks, performance testing, evidence, and reports. This folder is the layer above that — the thinking I apply as a test manager to turn 10 individual projects into one coherent quality program: how I assess value and risk per product, why I chose a given tool over another, what actually broke and how I found it, and what I'd report upward and to whom.
 
-It's built around the ISTQB **CTAL-TM (Certified Tester Advanced Level Test Management)** syllabus, but it isn't written as a syllabus summary — every claim below is backed by a real decision or a real finding from one of the 10 projects, not a generic best-practice statement. If a sentence here doesn't point to a specific project number, I've tried to cut it.
+It's built around the ISTQB **CTAL-TM (Certified Tester Advanced Level Test Management)** syllabus. Every claim below traces back to a specific decision or finding in one of the 10 projects — if a sentence doesn't point to a project number, I've tried to cut it.
 
 If you're new to this repo, [`test-strategy-master.md`](test-strategy-master.md) is the one to read first — everything else in this folder supports a claim made there.
 
@@ -16,6 +16,7 @@ If you're new to this repo, [`test-strategy-master.md`](test-strategy-master.md)
 | [`metrics-and-reporting-framework.md`](metrics-and-reporting-framework.md) | The KPIs I track, with real numbers from this portfolio, plus what a real sprint report looks like assembled end to end. |
 | [`stakeholder-communication.md`](stakeholder-communication.md) | Who gets told what, how often, and what's urgent enough to escalate outside the normal cadence — with a worked example. |
 | [`project-template.md`](project-template.md) | The 7-folder shape every project follows, and why I organize by project rather than by testing discipline. |
+| [`roadmap.md`](roadmap.md) | What's left, grouped by whether it's a coverage gap, a pending product decision, or automation debt that needs revisiting. |
 
 ## The 10 projects at a glance
 

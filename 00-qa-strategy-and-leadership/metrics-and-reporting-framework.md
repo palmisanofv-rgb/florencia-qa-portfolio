@@ -2,7 +2,7 @@
 
 **Author:** Florencia Palmisano
 
-What I report upward isn't "tests passed" — it's whether quality risk is trending in the right direction, and where the team's time is best spent next. Every number below is pulled from the real 10 projects in this portfolio, not a generic KPI list applied retroactively.
+What I report upward isn't "tests passed" — it's whether quality risk is trending in the right direction, and where the team's time is best spent next. Every number below comes from this portfolio's 10 projects, not a KPI list I'm applying after the fact.
 
 ## 1. Coverage & automation
 

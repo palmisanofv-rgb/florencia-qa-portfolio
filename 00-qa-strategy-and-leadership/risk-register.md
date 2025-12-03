@@ -5,6 +5,8 @@
 
 **Scoring model:** Likelihood and Impact are each rated Low / Medium / High / Critical. Risk Level = the higher of the two, adjusted up one step when both are Medium or above (a Medium/Medium risk with a plausible path to real harm gets treated as High, not averaged down). **Status** shows what actually happened once testing ran.
 
+![Risk heatmap: likelihood vs impact, 28 risks plotted by outcome status](./risk-heatmap.svg)
+
 ## How to read the Status column
 
 - **Materialized** — this risk was a real, confirmed finding, not a hypothetical.
@@ -76,4 +78,4 @@
 
 ## What this register tells me about the portfolio as a whole
 
-Of the risks scored **High or Critical** across all 10 projects, **3 materialized into real, confirmed findings**: Parabank's broken authentication (R-11), DemoBlaze's CORS misconfiguration (R-14), and BlazeDemo's hardcoded confirmation route (R-06). None of the three were found by accident — each came from a test built specifically because the risk was scored high enough to justify writing a real assertion instead of a happy-path check. That's the return on doing risk scoring honestly before writing test cases, rather than treating it as a formality to fill in after the fact.
+Of the risks scored **High or Critical** across all 10 projects, **3 materialized into real, confirmed findings**: Parabank's broken authentication (R-11), DemoBlaze's CORS misconfiguration (R-14), and BlazeDemo's hardcoded confirmation route (R-06). None of the three were found by accident — each came from a test built specifically because the risk was scored high enough to justify writing a real assertion instead of a happy-path check. That's the return on doing risk scoring honestly before writing test cases.

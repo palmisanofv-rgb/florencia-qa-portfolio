@@ -2,7 +2,7 @@
 
 **Author:** Florencia Palmisano
 
-A test manager's job includes choosing tools for a team's actual skill mix, budget, and CI constraints — not defaulting to whatever's personally preferred. Every tool decision in this portfolio is written up as if it were a real team decision, and two of them are backed by an actual migration away from a tool that turned out to be a bad fit, not a hypothetical trade-off table.
+A test manager's job includes choosing tools for a team's actual skill mix, budget, and CI constraints — not defaulting to whatever's personally preferred. Every tool decision in this portfolio is written up as if it were a real team decision, and two of them are backed by an actual migration away from a tool that turned out to be a bad fit, with the specific bugs that drove the switch kept on record.
 
 ## 1. Decision framework
 
@@ -32,7 +32,7 @@ The table above states tool trade-offs the way most portfolios do — as reasoni
 
 ### 3.1 saucedemo: Selenium/Java → Playwright
 
-The earlier Selenium/Java version of Project 02 went through several rounds of debugging real timing bugs against this exact React app: a shared-WebDriver-instance thread-safety race when tests ran in parallel, a click that silently didn't register on the app's controlled inputs, and a submission race between Selenium's `sendKeys()` and React's controlled-input re-render cycle. None of these were exotic — they're the textbook failure mode of a WebDriver-generation tool against a framework that re-renders on every keystroke. Playwright's `fill()` (which sets the value and dispatches the right events in one atomic action) and its built-in auto-waiting were adopted specifically to close that gap. This is a real, evidence-backed tool-fit decision, not a preference for the newer tool.
+The earlier Selenium/Java version of Project 02 went through several rounds of debugging real timing bugs against this exact React app: a shared-WebDriver-instance thread-safety race when tests ran in parallel, a click that silently didn't register on the app's controlled inputs, and a submission race between Selenium's `sendKeys()` and React's controlled-input re-render cycle. None of these were exotic — they're the textbook failure mode of a WebDriver-generation tool against a framework that re-renders on every keystroke. Playwright's `fill()` (which sets the value and dispatches the right events in one atomic action) and its built-in auto-waiting were adopted specifically to close that gap.
 
 ### 3.2 the-internet: WebdriverIO → Selenium/Python
 
@@ -40,4 +40,4 @@ Project 06 carries forward two lessons from an earlier WebdriverIO implementatio
 
 ## 4. What this reflects
 
-When picking a tool, the real question isn't "which tool is best" — it's *who will maintain this, what does the CI budget allow, and what failure mode does this layer need to catch that others can't?* Splitting Playwright (modern SPAs) from Selenium (legacy, server-rendered systems) mirrors the actual reason a real QA org ends up running more than one automation tool: different systems in the same company are frequently built years apart on different stacks, and a one-size-fits-all tool choice usually means forcing a bad fit onto at least one of them. The two migrations above are what that looks like in practice, not just in theory.
+When picking a tool, the real question isn't "which tool is best" — it's *who will maintain this, what does the CI budget allow, and what failure mode does this layer need to catch that others can't?* Splitting Playwright (modern SPAs) from Selenium (legacy, server-rendered systems) mirrors the actual reason a real QA org ends up running more than one automation tool: different systems in the same company are frequently built years apart on different stacks, and a one-size-fits-all tool choice usually means forcing a bad fit onto at least one of them. The two migrations above are what that looks like in practice.

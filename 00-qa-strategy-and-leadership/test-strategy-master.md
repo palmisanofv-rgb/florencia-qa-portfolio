@@ -31,7 +31,7 @@ Coverage follows risk, not the other way around. Before writing a single test ca
 
 ### 3.2 Likelihood × impact, not gut feeling
 
-Every project's `test-strategy.md` scores its top risks on likelihood and impact before anything gets prioritized. A few examples, pulled directly from this portfolio rather than invented for illustration:
+Every project's `test-strategy.md` scores its top risks on likelihood and impact before anything gets prioritized. A few examples from this portfolio:
 
 - **CURA Healthcare** ([03](../03-healthcare-cura)): "Confirmation screen shows different data than submitted" — scored Medium likelihood / Critical impact, specifically because a healthcare booking confirmation showing the wrong facility or date is not a cosmetic bug, it's a patient-safety-adjacent one. This is the risk that made `getConfirmedFacility()` correctness a P1 assertion rather than an afterthought.
 - **Parabank** ([04](../04-banking-parabank)): "Transfer debits one account without crediting the other" was scored Low likelihood / Critical impact — low likelihood because it's a well-trodden banking-demo code path, but the impact score is what justified automating balance reconciliation instead of just checking for a "Transfer Complete" banner.
@@ -51,7 +51,7 @@ Automation ratio is a *deliberate* number in this portfolio, not "everything I g
 
 ## 5. Test Design Techniques Applied
 
-These aren't abstract ISTQB vocabulary here — each technique below is tied to a real case in this portfolio:
+Each technique below is tied to a real case in this portfolio:
 
 - **Equivalence partitioning** — CURA's date-of-appointment field: valid future dates vs. past dates are two classes, and testing revealed the app doesn't actually enforce the past-date partition at all (documented as an exploratory finding requiring a product decision, not silently automated around).
 - **Boundary value analysis** — Parabank's transfer amount: the interesting boundary isn't "a large transfer," it's **$0** — and the real system accepted a $0 transfer without rejection, exactly the kind of edge case boundary analysis is meant to surface.

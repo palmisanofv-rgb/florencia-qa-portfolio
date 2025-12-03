@@ -1,0 +1,109 @@
+<svg viewBox="0 0 900 780" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
+  <rect x="0" y="0" width="900" height="780" fill="#ffffff"/>
+
+  <text x="450" y="28" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">Portfolio Risk Heatmap — Likelihood × Impact</text>
+  <text x="450" y="50" text-anchor="middle" font-size="12" fill="#555">28 risks scored across all 10 projects, plotted by outcome status. See risk-register.md for exact wording and evidence per risk.</text>
+
+  <!-- Grid cells (severity background) -->
+  <g stroke="#ffffff" stroke-width="2">
+    <rect x="110" y="80"  width="180" height="130" fill="#FFCCBC"/>
+    <rect x="290" y="80"  width="180" height="130" fill="#FFAB91"/>
+    <rect x="470" y="80"  width="180" height="130" fill="#FF8A65"/>
+    <rect x="650" y="80"  width="180" height="130" fill="#EF9A9A"/>
+
+    <rect x="110" y="210" width="180" height="130" fill="#FFF9C4"/>
+    <rect x="290" y="210" width="180" height="130" fill="#FFE0B2"/>
+    <rect x="470" y="210" width="180" height="130" fill="#FFCCBC"/>
+    <rect x="650" y="210" width="180" height="130" fill="#FFAB91"/>
+
+    <rect x="110" y="340" width="180" height="130" fill="#DCEDC8"/>
+    <rect x="290" y="340" width="180" height="130" fill="#FFF9C4"/>
+    <rect x="470" y="340" width="180" height="130" fill="#FFE0B2"/>
+    <rect x="650" y="340" width="180" height="130" fill="#FFCCBC"/>
+
+    <rect x="110" y="470" width="180" height="130" fill="#C8E6C9"/>
+    <rect x="290" y="470" width="180" height="130" fill="#DCEDC8"/>
+    <rect x="470" y="470" width="180" height="130" fill="#FFF9C4"/>
+    <rect x="650" y="470" width="180" height="130" fill="#FFE0B2"/>
+  </g>
+
+  <!-- grid lines -->
+  <g stroke="#bbbbbb" stroke-width="1" fill="none">
+    <rect x="110" y="80" width="720" height="520"/>
+    <line x1="290" y1="80" x2="290" y2="600"/>
+    <line x1="470" y1="80" x2="470" y2="600"/>
+    <line x1="650" y1="80" x2="650" y2="600"/>
+    <line x1="110" y1="210" x2="830" y2="210"/>
+    <line x1="110" y1="340" x2="830" y2="340"/>
+    <line x1="110" y1="470" x2="830" y2="470"/>
+  </g>
+
+  <!-- axis labels -->
+  <text x="200" y="620" text-anchor="middle" font-size="13" fill="#333">Low</text>
+  <text x="380" y="620" text-anchor="middle" font-size="13" fill="#333">Medium</text>
+  <text x="560" y="620" text-anchor="middle" font-size="13" fill="#333">High</text>
+  <text x="740" y="620" text-anchor="middle" font-size="13" fill="#333">Critical</text>
+  <text x="470" y="645" text-anchor="middle" font-size="14" font-weight="600" fill="#1a1a1a">Likelihood →</text>
+
+  <text x="95" y="150" text-anchor="end" font-size="13" fill="#333">Critical</text>
+  <text x="95" y="280" text-anchor="end" font-size="13" fill="#333">High</text>
+  <text x="95" y="410" text-anchor="end" font-size="13" fill="#333">Medium</text>
+  <text x="95" y="540" text-anchor="end" font-size="13" fill="#333">Low</text>
+  <text x="40" y="340" text-anchor="middle" font-size="14" font-weight="600" fill="#1a1a1a" transform="rotate(-90 40 340)">Impact →</text>
+
+  <!-- Risk circles: fill = status (red=Materialized, green=Tested not found, amber=Identified/accepted, gray=Out of scope/unverified) -->
+  <g font-size="10" font-weight="700" fill="#ffffff" text-anchor="middle">
+    <!-- (Low, Critical): R-02, R-10, R-11, R-12 -->
+    <circle cx="170" cy="125" r="13" fill="#43A047"/><text x="170" y="129">02</text>
+    <circle cx="230" cy="125" r="13" fill="#43A047"/><text x="230" y="129">10</text>
+    <circle cx="170" cy="165" r="13" fill="#E53935"/><text x="170" y="169">11</text>
+    <circle cx="230" cy="165" r="13" fill="#43A047"/><text x="230" y="169">12</text>
+
+    <!-- (Medium, Critical): R-04 -->
+    <circle cx="380" cy="145" r="13" fill="#43A047"/><text x="380" y="149">04</text>
+
+    <!-- (Medium, High): R-01,06,07,08,09,14,19,24,27 -->
+    <circle cx="325" cy="235" r="13" fill="#43A047"/><text x="325" y="239">01</text>
+    <circle cx="380" cy="235" r="13" fill="#E53935"/><text x="380" y="239">06</text>
+    <circle cx="435" cy="235" r="13" fill="#43A047"/><text x="435" y="239">07</text>
+    <circle cx="325" cy="275" r="13" fill="#43A047"/><text x="325" y="279">08</text>
+    <circle cx="380" cy="275" r="13" fill="#43A047"/><text x="380" y="279">09</text>
+    <circle cx="435" cy="275" r="13" fill="#E53935"/><text x="435" y="279">14</text>
+    <circle cx="325" cy="315" r="13" fill="#43A047"/><text x="325" y="319">19</text>
+    <circle cx="380" cy="315" r="13" fill="#43A047"/><text x="380" y="319">24</text>
+    <circle cx="435" cy="315" r="13" fill="#757575"/><text x="435" y="319">27</text>
+
+    <!-- (High, Medium): R-13 -->
+    <circle cx="560" cy="405" r="13" fill="#FB8C00"/><text x="560" y="409">13</text>
+
+    <!-- (Medium, Medium): R-05, R-15, R-16, R-23 -->
+    <circle cx="350" cy="385" r="13" fill="#FB8C00"/><text x="350" y="389">05</text>
+    <circle cx="410" cy="385" r="13" fill="#E53935"/><text x="410" y="389">15</text>
+    <circle cx="350" cy="425" r="13" fill="#43A047"/><text x="350" y="429">16</text>
+    <circle cx="410" cy="425" r="13" fill="#43A047"/><text x="410" y="429">23</text>
+
+    <!-- (High, Low): R-25 -->
+    <circle cx="560" cy="535" r="13" fill="#FB8C00"/><text x="560" y="539">25</text>
+
+    <!-- (Medium, Low): R-03, R-20, R-21 -->
+    <circle cx="335" cy="535" r="13" fill="#E53935"/><text x="335" y="539">03</text>
+    <circle cx="380" cy="535" r="13" fill="#E53935"/><text x="380" y="539">20</text>
+    <circle cx="425" cy="535" r="13" fill="#FB8C00"/><text x="425" y="539">21</text>
+
+    <!-- (Low, Low): R-17, R-18, R-22 -->
+    <circle cx="155" cy="535" r="13" fill="#E53935"/><text x="155" y="539">17</text>
+    <circle cx="200" cy="535" r="13" fill="#E53935"/><text x="200" y="539">18</text>
+    <circle cx="245" cy="535" r="13" fill="#FB8C00"/><text x="245" y="539">22</text>
+  </g>
+
+  <!-- Legend -->
+  <g font-size="12" fill="#333">
+    <circle cx="130" cy="672" r="9" fill="#E53935"/><text x="146" y="676">Materialized — real, confirmed finding</text>
+    <circle cx="130" cy="694" r="9" fill="#43A047"/><text x="146" y="698">Tested, not found — real test built, system held up</text>
+    <circle cx="130" cy="716" r="9" fill="#FB8C00"/><text x="146" y="720">Identified, accepted — known gap, needs a product decision</text>
+    <circle cx="130" cy="738" r="9" fill="#757575"/><text x="146" y="742">Out of scope, deliberate / unverified</text>
+  </g>
+  <text x="470" y="672" font-size="11" fill="#666">R-26 and R-28 aren't plotted — neither has a meaningful likelihood/impact pair (both are deliberate scope decisions, not scored risks).</text>
+  <text x="470" y="690" font-size="11" fill="#666">A few compound ratings in risk-register.md (e.g. "Low-Medium") are rounded to the nearer bin here for plotting only —</text>
+  <text x="470" y="708" font-size="11" fill="#666">risk-register.md is the source of truth for exact wording.</text>
+</svg>
