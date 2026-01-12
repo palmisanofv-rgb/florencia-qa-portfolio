@@ -25,4 +25,17 @@ export class InventoryPage {
       expected,
     );
   }
+
+  async productImageSrcs(): Promise<string[]> {
+    return this.page.locator('.inventory_item img').evaluateAll((imgs) => imgs.map((img) => img.getAttribute('src')));
+  }
+
+  async sortBy(value: 'az' | 'za' | 'lohi' | 'hilo') {
+    await this.page.locator('[data-test="product-sort-container"]').selectOption(value);
+  }
+
+  async productPrices(): Promise<number[]> {
+    const texts = await this.page.locator('.inventory_item_price').allTextContents();
+    return texts.map((t) => Number(t.replace(/[^0-9.]/g, '')));
+  }
 }

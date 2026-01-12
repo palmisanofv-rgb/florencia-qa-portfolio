@@ -37,6 +37,12 @@ test('capture one evidence screenshot per test case', async ({ page }) => {
     await shoot('tc03-problem-user-inventory');
   });
 
+  await step('TC-04-glitch-timing', async () => {
+    await login.goto();
+    await login.login('performance_glitch_user', 'secret_sauce');
+    await shoot('tc04-performance-glitch-user-inventory');
+  });
+
   await step('TC-07-and-08', async () => {
     await login.goto();
     await login.login('standard_user', 'secret_sauce');
