@@ -8,4 +8,4 @@ TC-06,Login with visual_user,P2,Regression,None,1. Enter visual_user/secret_sauc
 TC-07,Add two products to cart,P1,Functional,Logged in as standard_user,1. Add Sauce Labs Backpack 2. Add Sauce Labs Bike Light,Cart badge shows 2; both items appear on the cart page,Yes - checkout-journey.spec.ts
 TC-08,Complete checkout with valid information,P1,E2E,Cart has 2 items,1. Go to checkout 2. Fill first/last name + zip 3. Continue 4. Finish,Order completes with 'Thank you for your order!',Yes - checkout-journey.spec.ts
 TC-09,Checkout rejects missing last name,P1,Negative,Cart has 1 item,1. Go to checkout 2. Fill first name only 3. Continue,Error 'Error: Last Name is required' is shown,Yes - checkout-journey.spec.ts
-TC-10,Sort products price low to high,P2,Functional,On inventory page,1. Select 'Price (low to high)' from sort dropdown,Product list re-orders ascending by price,No - manual
+TC-10,Sort products price low to high,P2,Functional,On inventory page,1. Select 'Price (low to high)' from sort dropdown,Product list re-orders ascending by price,Yes - inventory-sort.spec.ts
