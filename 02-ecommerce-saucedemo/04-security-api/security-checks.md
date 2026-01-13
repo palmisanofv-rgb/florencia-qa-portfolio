@@ -24,3 +24,20 @@ Swag Labs has no public backend API (it's a static React SPA with purely client-
 ## Disposition
 
 Both findings are appropriate for this app's purpose (a Selenium/Playwright practice target, not a production system) — documented here as the kind of question a test manager would still ask even on a low-risk system, not as blocking defects.
+
+## Accessibility findings
+
+A separate, lightweight AI-assisted accessibility spot-check (alt text, contrast, keyboard reachability) was run against the login and inventory pages — see [`../03-automation/accessibility-check.md`](../03-automation/accessibility-check.md) for full methodology. Summary:
+
+| Dimension | Result |
+|---|---|
+| Alt text (inventory page, 8 images) | **Clean** — all 8 have specific, descriptive alt text (e.g. "Sauce Labs Backpack"), unlike Project 01's generic repeated string |
+| Contrast (login button, add-to-cart button) | **Clean** — 9.17:1 and 16.26:1, both comfortably above the 4.5:1 threshold |
+| Keyboard reachability (login page) | Reached in 2 tabs, but no visible focus indicator (same pattern as Project 01) |
+| Keyboard reachability (inventory page, "Add to cart") | **Inconclusive** — a real browser-automation tooling failure (not a site defect) prevented a clean re-run; confirmed again during this deepening pass rather than assumed fixed |
+
+Overall this is the cleanest accessibility result in the portfolio so far on the dimensions that could be checked — the seeded test accounts (below) are a more interesting finding than the site's own accessibility posture.
+
+## Seeded-account defect: `problem_user`'s product images
+
+Beyond security/accessibility, this pass added a real, verified assertion for a defect this project's sprint 1 report flagged but didn't individually assert: **every product image on `problem_user`'s inventory page is the exact same broken placeholder** (`sl-404.*.jpg`), confirmed by comparing against `standard_user`'s 6 distinct product images. Now asserted directly in [`../03-automation/tests/seeded-accounts-login.spec.ts`](../03-automation/tests/seeded-accounts-login.spec.ts) rather than only implied by a passing login check. `performance_glitch_user`'s artificial delay is now also measured directly: **~11x slower** than `standard_user` in a real captured run (5.1s vs 0.5s).
