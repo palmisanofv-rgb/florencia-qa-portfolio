@@ -1,5 +1,7 @@
 # 00 — QA Strategy & Leadership
 
+I built this portfolio to practice the full width of QA work, not just automation scripting — and this folder is where that shows up most directly. It's the part I'd point to first if someone asked "okay, but can you actually manage testing on a real program, not just execute it."
+
 The other 10 projects are execution: hands-on testing across 10 domains, each with its own strategy, test cases, automation, security/API checks, performance testing, evidence, and reports. This folder is the layer above that — the thinking I apply as a test manager to turn 10 individual projects into one coherent quality program: how I assess value and risk per product, why I chose a given tool over another, what actually broke and how I found it, and what I'd report upward and to whom.
 
 It's built around the ISTQB **CTAL-TM (Certified Tester Advanced Level Test Management)** syllabus. Every claim below traces back to a specific decision or finding in one of the 10 projects — if a sentence doesn't point to a project number, I've tried to cut it.
