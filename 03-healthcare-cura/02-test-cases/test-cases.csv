@@ -1,0 +1,6 @@
+TC ID,Title,Priority,Type,Preconditions,Steps,Expected Result,Automated
+TC-01,Login with valid credentials,P1,Functional,None,1. Go to profile.php 2. Enter any non-empty username/password 3. Click Login,User reaches the appointment/profile area,Yes - booking-journey.spec (Java)
+TC-02,Login with empty credentials,P1,Negative,None,1. Leave username/password blank 2. Click Login,Login error is shown; no session created,Yes - booking-journey.spec (Java)
+TC-03,Book appointment with valid data,P1,E2E,Logged in,1. Select facility 2. Check hospital readmission 3. Select healthcare program 4. Enter visit date + comment 5. Book Appointment,Confirmation screen shows the exact facility and date submitted,Yes - booking-journey.spec (Java)
+TC-04,Confirmation data matches submission (data integrity),P1,Functional,Appointment booked,Compare confirmation screen facility/date against what was submitted in TC-03,Facility and date on confirmation match submission exactly,Yes - booking-journey.spec (Java)
+TC-05,Past date accepted for new appointment,P2,Negative,Logged in,1. Enter a past date in visit date field 2. Book Appointment,"Should be rejected with validation error (exploratory - CURA does not enforce this, documented as a finding)",No - manual/exploratory
