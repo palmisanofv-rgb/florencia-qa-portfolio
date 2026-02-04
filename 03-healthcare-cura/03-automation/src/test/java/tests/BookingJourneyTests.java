@@ -50,7 +50,7 @@ public class BookingJourneyTests extends BaseTest {
         String selectedFacility = "Tokyo CURA Healthcare Center";
         AppointmentPage appointment = new AppointmentPage(driver);
         captureEvidence("tc03-appointment-form-before-submit");
-        appointment.bookAppointment(selectedFacility, "10/15/2026", "Automated booking - QA portfolio E2E test");
+        appointment.bookAppointment(selectedFacility, "15/10/2026", "Automated booking - QA portfolio E2E test");
 
         ConfirmationPage confirmation = new ConfirmationPage(driver);
         captureEvidence("tc04-confirmation-screen");

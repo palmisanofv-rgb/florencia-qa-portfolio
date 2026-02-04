@@ -17,6 +17,10 @@
 
 The first CI run failed on `confirmationScreenMatchesSubmittedFacility` — but the *real* bug was one layer up: `validLoginReachesAppointmentArea` had been silently passing on a **login that was actually failing**. The original assertion checked for "Make Appointment" text anywhere on the page, and CURA's own login page copy reads "Please login to **make appointment**" — so the check passed whether login succeeded or not. The actual cause was also a wrong assumption: an earlier guess used password `ThisIsNotARealPassword1`, but CURA validates against a real seeded demo account with password `ThisIsNotAPassword` (no trailing "1") — confirmed from the failure screenshot showing the demo credentials box. Both the credentials and the assertion (now checking that the login form element is actually gone) were fixed together, since one caused the other to go unnoticed.
 
+## Real CI finding: an invalid date silently rejected
+
+A second CI run then failed on the same test, one step further in: the visit-date field was being sent `10/15/2026` (US mm/dd/yyyy ordering), which CURA's date picker silently rejected — month "15" doesn't exist — leaving its popup open and blocking the rest of the form. The field's own placeholder reads `dd/mm/yyyy`; the fix was sending `15/10/2026` in the format the field actually expects, plus an `Escape` keypress to close the now-satisfied picker before continuing. Confirmed from a failure screenshot showing the unclosed date-picker popup sitting over the form.
+
 ## Why Selenium here, and why Katalon was dropped
 
 Katalon Studio's low-code project format isn't something a hiring manager can meaningfully review by reading code in a GitHub diff — a raw Selenium project is. Selenium was chosen over Playwright specifically to frame this as a "legacy system a team inherited" exercise (see [`../01-planning-strategy/test-strategy.md`](../01-planning-strategy/test-strategy.md)), consistent with how this portfolio splits tool choice by system age/stack, not personal preference.
