@@ -1,8 +1,9 @@
 package pages;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
 public class AppointmentPage {
@@ -20,21 +21,22 @@ public class AppointmentPage {
 
     /**
      * @param visitDateValue must be dd/mm/yyyy - confirmed from a real failure
-     *                       screenshot showing the field's "dd/mm/yyyy" placeholder
-     *                       and an open (unclosed) date-picker popup after an
-     *                       earlier mm/dd/yyyy value was silently rejected as an
-     *                       invalid date (month "15" doesn't exist).
+     *                       screenshot showing the field's "dd/mm/yyyy" placeholder.
      */
     public void bookAppointment(String facility, String visitDateValue, String commentText) {
         new Select(driver.findElement(facilityDropdown)).selectByVisibleText(facility);
         driver.findElement(readmissionCheckbox).click();
         driver.findElement(medicaidRadio).click();
-        driver.findElement(visitDate).clear();
-        driver.findElement(visitDate).sendKeys(visitDateValue);
-        // The date picker widget opens its calendar popup on focus/input and
-        // doesn't close itself - Escape dismisses it so it can't intercept the
-        // click on the Book Appointment button below it.
-        driver.findElement(visitDate).sendKeys(Keys.ESCAPE);
+        // A follow-up failure screenshot showed the field still empty (still
+        // showing its "dd/mm/yyyy" placeholder) with the calendar popup open -
+        // this field is backed by a Bootstrap datepicker and doesn't accept
+        // real typed input at all; sendKeys() only triggers the popup, then
+        // Escape closes it again with nothing entered. Setting the value
+        // directly avoids opening that popup in the first place.
+        WebElement dateField = driver.findElement(visitDate);
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].value = arguments[1]; arguments[0].dispatchEvent(new Event('change', { bubbles: true }));",
+                dateField, visitDateValue);
         driver.findElement(comment).sendKeys(commentText);
         driver.findElement(bookButton).click();
     }
