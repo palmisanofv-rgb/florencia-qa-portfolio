@@ -2,6 +2,7 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
@@ -27,16 +28,22 @@ public class AppointmentPage {
         new Select(driver.findElement(facilityDropdown)).selectByVisibleText(facility);
         driver.findElement(readmissionCheckbox).click();
         driver.findElement(medicaidRadio).click();
-        // A follow-up failure screenshot showed the field still empty (still
-        // showing its "dd/mm/yyyy" placeholder) with the calendar popup open -
-        // this field is backed by a Bootstrap datepicker and doesn't accept
-        // real typed input at all; sendKeys() only triggers the popup, then
-        // Escape closes it again with nothing entered. Setting the value
-        // directly avoids opening that popup in the first place.
+        // A follow-up failure screenshot showed the whole form reset back to
+        // its defaults after clicking Book Appointment (unchecked box, default
+        // radio, empty comment) - this is CURA's AngularJS form silently
+        // failing its own validation and re-rendering blank, because setting
+        // .value directly via JS updates the DOM but never touches Angular's
+        // ng-model, which still saw the date field as empty. The field's
+        // `readonly` attribute is what blocks real typing in the first place
+        // (confirmed by the very first attempt: sendKeys alone left the field
+        // empty) - removing that attribute lets real sendKeys fire the actual
+        // focus/keydown/input events ng-model listens for, then Escape closes
+        // whatever calendar popup that typing triggers.
         WebElement dateField = driver.findElement(visitDate);
-        ((JavascriptExecutor) driver).executeScript(
-                "arguments[0].value = arguments[1]; arguments[0].dispatchEvent(new Event('change', { bubbles: true }));",
-                dateField, visitDateValue);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].removeAttribute('readonly')", dateField);
+        dateField.clear();
+        dateField.sendKeys(visitDateValue);
+        dateField.sendKeys(Keys.ESCAPE);
         driver.findElement(comment).sendKeys(commentText);
         driver.findElement(bookButton).click();
     }
