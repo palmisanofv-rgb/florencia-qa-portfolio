@@ -1,9 +1,13 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.time.Month;
 import java.time.format.TextStyle;
 import java.util.Locale;
@@ -51,7 +55,24 @@ public class AppointmentPage {
         int targetYear = Integer.parseInt(parts[2]);
         String targetLabel = Month.of(targetMonth).getDisplayName(TextStyle.FULL, Locale.ENGLISH) + " " + targetYear;
 
-        driver.findElement(visitDate).click();
+        // Confirmed via a real CI failure: a single click here occasionally
+        // opens nothing (NoSuchElementException on the calendar header right
+        // after) - AngularJS wires this datepicker plugin to the field via a
+        // directive that attaches a beat after the page's own render pass, so
+        // a click landing before that finishes closes over nothing. Retrying
+        // the click covers that gap without guessing at a fixed delay.
+        WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(3));
+        boolean calendarOpen = false;
+        for (int attempt = 0; attempt < 5 && !calendarOpen; attempt++) {
+            driver.findElement(visitDate).click();
+            try {
+                shortWait.until(ExpectedConditions.presenceOfElementLocated(datepickerMonthYear));
+                calendarOpen = true;
+            } catch (TimeoutException retry) {
+                // try again
+            }
+        }
+
         while (!driver.findElement(datepickerMonthYear).getText().trim().equals(targetLabel)) {
             driver.findElement(datepickerNextMonth).click();
         }
