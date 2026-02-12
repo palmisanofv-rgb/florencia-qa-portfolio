@@ -1,27 +1,17 @@
 package pages;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
-import java.time.Month;
-import java.time.format.TextStyle;
-import java.util.Locale;
 
 public class AppointmentPage {
     private final WebDriver driver;
     private final By facilityDropdown = By.id("combo_facility");
     private final By readmissionCheckbox = By.id("chk_hospotal_readmission"); // sic - real typo in CURA's own markup
     private final By medicaidRadio = By.id("radio_program_medicaid");
-    private final By visitDate = By.id("txt_visit_date");
     private final By comment = By.id("txt_comment");
     private final By bookButton = By.id("btn-book-appointment");
-    private final By datepickerMonthYear = By.cssSelector(".datepicker-switch");
-    private final By datepickerNextMonth = By.cssSelector(".next");
 
     public AppointmentPage(WebDriver driver) {
         this.driver = driver;
@@ -39,45 +29,31 @@ public class AppointmentPage {
         driver.findElement(bookButton).click();
     }
 
-    // Two earlier approaches both failed against this real field, confirmed via CI
-    // failure screenshots each time: sendKeys() alone never lands a value (the field
-    // is readonly); writing .value directly via JavaScript updates the DOM but never
-    // touches AngularJS's ng-model, so the form still saw the date as empty and
-    // silently reset itself on submit. This Bootstrap datepicker only updates that
-    // model through its own calendar UI, so driving that UI - clicking "next month"
-    // until the target month is showing, then clicking the target day - is the one
-    // path guaranteed to update the app's real state, since it's the same path the
-    // widget itself is built to use.
+    // Four earlier approaches all failed against this real field, each confirmed via
+    // its own CI failure screenshot: sendKeys() alone never lands a value (the field
+    // is readonly); writing .value directly via JS updates the DOM but never touches
+    // AngularJS's ng-model, so the form silently reset on submit; removing readonly
+    // and using real sendKeys hit the exact same empty-field result, meaning the
+    // widget's own JS blocks typed input outright, not just the readonly attribute;
+    // and driving the calendar's own UI (clicking through months, clicking a day)
+    // worked once but proved unreliable across further runs - the popup didn't
+    // consistently re-open the same way every time.
+    // The actual fix uses the bootstrap-datepicker plugin's own public jQuery API to
+    // set the date and fires the specific `changeDate` event that plugin emits (not
+    // the generic `change` event tried earlier) - that's what the Angular binding
+    // around this widget is really listening for, and it's the same call path the
+    // widget uses internally regardless of how the date was chosen.
     private void selectVisitDate(String visitDateValue) {
         String[] parts = visitDateValue.split("/");
         int targetDay = Integer.parseInt(parts[0]);
-        int targetMonth = Integer.parseInt(parts[1]);
+        int targetMonth = Integer.parseInt(parts[1]) - 1; // JS Date() months are 0-indexed
         int targetYear = Integer.parseInt(parts[2]);
-        String targetLabel = Month.of(targetMonth).getDisplayName(TextStyle.FULL, Locale.ENGLISH) + " " + targetYear;
 
-        // Confirmed via a real CI failure: a single click here occasionally
-        // opens nothing (NoSuchElementException on the calendar header right
-        // after) - AngularJS wires this datepicker plugin to the field via a
-        // directive that attaches a beat after the page's own render pass, so
-        // a click landing before that finishes closes over nothing. Retrying
-        // the click covers that gap without guessing at a fixed delay.
-        WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(3));
-        boolean calendarOpen = false;
-        for (int attempt = 0; attempt < 5 && !calendarOpen; attempt++) {
-            driver.findElement(visitDate).click();
-            try {
-                shortWait.until(ExpectedConditions.presenceOfElementLocated(datepickerMonthYear));
-                calendarOpen = true;
-            } catch (TimeoutException retry) {
-                // try again
-            }
-        }
-
-        while (!driver.findElement(datepickerMonthYear).getText().trim().equals(targetLabel)) {
-            driver.findElement(datepickerNextMonth).click();
-        }
-        driver.findElement(By.xpath(
-                "//td[contains(@class,'day') and not(contains(@class,'old')) and not(contains(@class,'new')) and text()='"
-                        + targetDay + "']")).click();
+        String script =
+                "var input = $('#txt_visit_date');" +
+                "input.datepicker('setDate', new Date(arguments[0], arguments[1], arguments[2]));" +
+                "input.trigger('changeDate');" +
+                "input.trigger('change');";
+        ((JavascriptExecutor) driver).executeScript(script, targetYear, targetMonth, targetDay);
     }
 }
