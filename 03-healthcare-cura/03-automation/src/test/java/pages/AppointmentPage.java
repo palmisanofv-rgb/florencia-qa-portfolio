@@ -1,9 +1,15 @@
 package pages;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+import java.time.Month;
+import java.time.format.TextStyle;
+import java.util.Locale;
 
 public class AppointmentPage {
     private final WebDriver driver;
@@ -12,6 +18,12 @@ public class AppointmentPage {
     private final By medicaidRadio = By.id("radio_program_medicaid");
     private final By comment = By.id("txt_comment");
     private final By bookButton = By.id("btn-book-appointment");
+    // The field's own <div class="input-group date" data-provide="datepicker"> wraps
+    // both #txt_visit_date and this icon addon - confirmed from a real failure
+    // screenshot's captured page source.
+    private final By datepickerIcon = By.cssSelector(".input-group-addon .glyphicon-calendar");
+    private final By datepickerMonthYear = By.cssSelector("th.datepicker-switch");
+    private final By datepickerNextMonth = By.cssSelector("th.next");
 
     public AppointmentPage(WebDriver driver) {
         this.driver = driver;
@@ -29,31 +41,39 @@ public class AppointmentPage {
         driver.findElement(bookButton).click();
     }
 
-    // Five earlier approaches all failed against this real field, each confirmed via
+    // Six earlier approaches all failed against this real field, each confirmed via
     // its own CI failure screenshot: sendKeys() alone never lands a value (the field
-    // is readonly); writing .value directly via JS updates the DOM but never touches
-    // AngularJS's ng-model, so the form silently reset on submit; removing readonly
-    // and using real sendKeys hit the exact same empty-field result, meaning the
-    // widget's own JS blocks typed input outright, not just the readonly attribute;
-    // driving the calendar's own UI (clicking through months, clicking a day) worked
-    // once but proved unreliable across further runs; and calling the datepicker
-    // plugin's own API on the #txt_visit_date input directly displayed the date in
-    // the wrong format (mm/dd/yyyy instead of the page's configured dd/mm/yyyy) and
-    // still reset the form on submit - the failure screenshot's raw HTML revealed why:
-    // the plugin is declared via `data-provide="datepicker"` on the *parent*
-    // `.input-group.date` element, not the input itself, so calling `.datepicker()`
-    // on the input silently spun up a second, separately-configured instance instead
-    // of driving the real one. Targeting that actual parent container is the fix.
+    // is readonly); writing .value directly via JS, and later calling the datepicker
+    // plugin's own jQuery API (even correctly targeted at its real parent container,
+    // which did fix the date's *display* format) both visually showed the right date
+    // but the checkbox, radio, and comment all still reset to blank on submit too -
+    // not just the date. That's the real tell: this app resets the *entire* form
+    // scope when Angular's own validation considers anything invalid, and no amount
+    // of jQuery/JS manipulation of the date field ever satisfies that validation,
+    // only a real, physically-driven UI interaction does. The one run that ever
+    // produced a genuine, correct confirmation screen (checkbox, radio, date, and
+    // comment all intact) was the one driving the actual calendar UI - clicking
+    // through months, then clicking a day. That approach was dropped too early over
+    // reliability concerns about *opening* the calendar; the real fix for that is
+    // using the calendar's own dedicated icon (confirmed to exist from the same
+    // failure screenshot) as the trigger, not the readonly text input, which was
+    // never guaranteed to open anything on click at all.
     private void selectVisitDate(String visitDateValue) {
         String[] parts = visitDateValue.split("/");
         int targetDay = Integer.parseInt(parts[0]);
-        int targetMonth = Integer.parseInt(parts[1]) - 1; // JS Date() months are 0-indexed
+        int targetMonth = Integer.parseInt(parts[1]);
         int targetYear = Integer.parseInt(parts[2]);
+        String targetLabel = Month.of(targetMonth).getDisplayName(TextStyle.FULL, Locale.ENGLISH) + " " + targetYear;
 
-        String script =
-                "var container = $('#txt_visit_date').closest('.input-group.date');" +
-                "container.datepicker('setDate', new Date(arguments[0], arguments[1], arguments[2]));" +
-                "container.trigger('changeDate');";
-        ((JavascriptExecutor) driver).executeScript(script, targetYear, targetMonth, targetDay);
+        driver.findElement(datepickerIcon).click();
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(datepickerMonthYear));
+
+        while (!driver.findElement(datepickerMonthYear).getText().trim().equals(targetLabel)) {
+            driver.findElement(datepickerNextMonth).click();
+        }
+        driver.findElement(By.xpath(
+                "//td[contains(@class,'day') and not(contains(@class,'old')) and not(contains(@class,'new')) and text()='"
+                        + targetDay + "']")).click();
     }
 }
