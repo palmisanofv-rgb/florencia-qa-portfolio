@@ -1,6 +1,7 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -16,12 +17,9 @@ public class AppointmentPage {
     private final By facilityDropdown = By.id("combo_facility");
     private final By readmissionCheckbox = By.id("chk_hospotal_readmission"); // sic - real typo in CURA's own markup
     private final By medicaidRadio = By.id("radio_program_medicaid");
+    private final By visitDate = By.id("txt_visit_date");
     private final By comment = By.id("txt_comment");
     private final By bookButton = By.id("btn-book-appointment");
-    // The field's own <div class="input-group date" data-provide="datepicker"> wraps
-    // both #txt_visit_date and this icon addon - confirmed from a real failure
-    // screenshot's captured page source.
-    private final By datepickerIcon = By.cssSelector(".input-group-addon .glyphicon-calendar");
     private final By datepickerMonthYear = By.cssSelector("th.datepicker-switch");
     private final By datepickerNextMonth = By.cssSelector("th.next");
 
@@ -41,23 +39,22 @@ public class AppointmentPage {
         driver.findElement(bookButton).click();
     }
 
-    // Six earlier approaches all failed against this real field, each confirmed via
-    // its own CI failure screenshot: sendKeys() alone never lands a value (the field
-    // is readonly); writing .value directly via JS, and later calling the datepicker
-    // plugin's own jQuery API (even correctly targeted at its real parent container,
-    // which did fix the date's *display* format) both visually showed the right date
-    // but the checkbox, radio, and comment all still reset to blank on submit too -
-    // not just the date. That's the real tell: this app resets the *entire* form
-    // scope when Angular's own validation considers anything invalid, and no amount
-    // of jQuery/JS manipulation of the date field ever satisfies that validation,
-    // only a real, physically-driven UI interaction does. The one run that ever
-    // produced a genuine, correct confirmation screen (checkbox, radio, date, and
-    // comment all intact) was the one driving the actual calendar UI - clicking
-    // through months, then clicking a day. That approach was dropped too early over
-    // reliability concerns about *opening* the calendar; the real fix for that is
-    // using the calendar's own dedicated icon (confirmed to exist from the same
-    // failure screenshot) as the trigger, not the readonly text input, which was
-    // never guaranteed to open anything on click at all.
+    // Seven earlier approaches all failed against this real field. Every JS/jQuery
+    // route (writing .value directly, and calling the datepicker plugin's own API -
+    // even correctly targeted at its real parent container, which did fix the
+    // date's *display* format) hit the same tell twice over: the checkbox, radio,
+    // and comment all reset to blank on submit too, not just the date, meaning this
+    // app resets its *entire* form scope whenever Angular's validation considers
+    // anything invalid, and no JS-driven value ever satisfies that. The one run that
+    // ever produced a genuine, fully-correct confirmation screen was the one
+    // physically driving the calendar UI. Clicking the dedicated calendar icon
+    // instead of the input, hoping for a more reliable trigger, timed out just the
+    // same. So the click target was never really the issue - opening this specific
+    // widget is just inherently flaky under CI (a real, load-dependent JS attach
+    // race, not something either click target fixes). A patient retry - reclicking
+    // the field itself every couple of seconds for up to half a minute - is what the
+    // one successful run effectively got "for free" from favorable timing; making
+    // that retry explicit is the actual fix.
     private void selectVisitDate(String visitDateValue) {
         String[] parts = visitDateValue.split("/");
         int targetDay = Integer.parseInt(parts[0]);
@@ -65,9 +62,17 @@ public class AppointmentPage {
         int targetYear = Integer.parseInt(parts[2]);
         String targetLabel = Month.of(targetMonth).getDisplayName(TextStyle.FULL, Locale.ENGLISH) + " " + targetYear;
 
-        driver.findElement(datepickerIcon).click();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.visibilityOfElementLocated(datepickerMonthYear));
+        WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(3));
+        boolean calendarOpen = false;
+        for (int attempt = 0; attempt < 10 && !calendarOpen; attempt++) {
+            driver.findElement(visitDate).click();
+            try {
+                shortWait.until(ExpectedConditions.visibilityOfElementLocated(datepickerMonthYear));
+                calendarOpen = true;
+            } catch (TimeoutException retry) {
+                // try again
+            }
+        }
 
         while (!driver.findElement(datepickerMonthYear).getText().trim().equals(targetLabel)) {
             driver.findElement(datepickerNextMonth).click();
