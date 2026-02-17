@@ -16,9 +16,10 @@ public class ConfirmationPage {
     }
 
     public String getConfirmedFacility() {
-        return driver.findElement(By.xpath(
-                "//table[contains(@class,'table')]//td[preceding-sibling::td[1][contains(text(),'Facility')]]"
-        )).getText();
+        // Confirmed from a real CI failure's captured HTML: this page isn't a
+        // table at all, it's a <label for="facility">/<p id="facility"> pair -
+        // the earlier xpath assumed a table structure that was never real here.
+        return driver.findElement(By.id("facility")).getText();
     }
 
     public boolean isConfirmationVisible() {
