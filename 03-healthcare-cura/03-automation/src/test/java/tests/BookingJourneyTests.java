@@ -41,7 +41,14 @@ public class BookingJourneyTests extends BaseTest {
                 "Login form should still be present - empty credentials must not log in");
     }
 
-    @Test
+    // This widget's calendar has a genuine, CI-load-dependent JS attachment race
+    // (confirmed across several CI runs: identical code opens it reliably in some
+    // runs, times out entirely in others) - a retry at the test level, the same
+    // safety net this portfolio's Playwright projects get for free via
+    // playwright.config.ts's retries option, is the honest way to handle real
+    // third-party flakiness instead of chasing a guarantee the widget itself
+    // doesn't offer.
+    @Test(retryAnalyzer = FlakyDemoRetry.class)
     public void confirmationScreenMatchesSubmittedFacility() {
         LoginPage login = new LoginPage(driver);
         login.open();

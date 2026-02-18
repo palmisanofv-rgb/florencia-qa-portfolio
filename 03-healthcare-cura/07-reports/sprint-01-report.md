@@ -34,6 +34,8 @@ This turned into the most stubborn bug in this entire portfolio - seven further 
 
 Ten rounds on one test is an outlier even for this portfolio, but the debugging log is the point: every step was a real, reproducible failure traced to an actual cause via a real CI artifact, not a guess asserted without checking.
 
+One more layer surfaced after that: the exact same code that produced a fully successful, correct booking in one CI run timed out entirely opening the calendar in the very next one - a genuine, CI-load-dependent JS attachment race in the widget itself, not a logic bug left to fix. This portfolio's Playwright projects already get a retry safety net for exactly this class of third-party flakiness via `playwright.config.ts`'s `retries` option; TestNG doesn't do this automatically, so a small `IRetryAnalyzer` (`FlakyDemoRetry`, up to 2 retries) was added and applied to this one test. That's the honest way to handle real flakiness in a widget outside this project's control, matching how Parabank's `$0`-transfer finding was handled - documented and retried, not chased into a guarantee the third-party demo doesn't actually offer.
+
 ## Why Selenium here, and why Katalon was dropped
 
 Katalon Studio's low-code project format isn't something a hiring manager can meaningfully review by reading code in a GitHub diff — a raw Selenium project is. Selenium was chosen over Playwright specifically to frame this as a "legacy system a team inherited" exercise (see [`../01-planning-strategy/test-strategy.md`](../01-planning-strategy/test-strategy.md)), consistent with how this portfolio splits tool choice by system age/stack, not personal preference.
