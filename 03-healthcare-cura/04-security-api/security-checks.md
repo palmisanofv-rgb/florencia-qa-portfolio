@@ -19,3 +19,7 @@ CURA has no public JSON API (server-rendered PHP), so this folder covers session
 ## Disposition
 
 The access-control redirect is a genuinely good sign (real server-side enforcement, confirmed not assumed). The missing headers are reported as a hardening recommendation, weighted slightly higher than the identical finding on the e-commerce projects in this portfolio, given the domain.
+
+## Accessibility findings
+
+A separate, lightweight AI-assisted accessibility spot-check (alt text, contrast, keyboard reachability) was run against the login page — see [`../03-automation/accessibility-check.md`](../03-automation/accessibility-check.md) for full methodology. **Clean pass, no findings:** contrast 12.63:1 (well above the 4.5:1 threshold), login button reached in 2 keyboard tabs, and — unlike Projects 01 and 02 — this page shows a **clearly visible focus indicator** around the button once focused, not just a programmatic focus change. Alt text was not applicable (no `<img>` elements on this flow). This is the cleanest accessibility result checked so far in the portfolio.
