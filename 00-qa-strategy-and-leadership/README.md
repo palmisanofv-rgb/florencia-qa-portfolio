@@ -1,6 +1,8 @@
 # 00 — QA Strategy & Leadership
 
-The other 10 projects in this portfolio are execution: hands-on testing across 10 domains, each with its own strategy, test cases, automation, security/API checks, performance testing, evidence, and reports. This folder is the test-management layer above that — the thinking that turns 10 individual projects into one coherent quality program instead of 10 unrelated exercises: how I assess value and risk per product, why I chose a given tool over another, what actually broke and how I found it, and what I'd report upward and to whom.
+This is the test-management layer of the portfolio: the reasoning that sits above the 10 hands-on projects and turns them into one coherent quality program instead of 10 unrelated exercises.
+
+The other 10 projects are execution: hands-on testing across 10 domains, each with its own strategy, test cases, automation, security/API checks, performance testing, evidence, and reports. Here, I cover how I assess value and risk per product, why I chose a given tool over another, what actually broke and how I found it, and what I'd report upward and to whom.
 
 It's built around the ISTQB **CTAL-TM (Certified Tester Advanced Level Test Management)** syllabus. Every claim below traces back to a specific decision or finding in one of the 10 projects — if a sentence doesn't point to a project number, I've tried to cut it.
 
