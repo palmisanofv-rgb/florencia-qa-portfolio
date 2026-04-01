@@ -1,0 +1,8 @@
+TC ID,Title,Priority,Type,Preconditions,Steps,Expected Result,Automated
+TC-01,Register new customer,P1,Functional,None,"1. Go to register.htm 2. Fill personal details 3. Submit",Account created with an initial funded Checking account; user is logged in,Yes - test_login.py::registered_user fixture
+TC-02,Login with freshly registered account,P1,Functional,A freshly registered account,1. Log out 2. Log back in with the same credentials,Accounts Overview page loads,Yes - test_login.py
+TC-03,Login with invalid password,P1,Negative,A freshly registered account,1. Log out 2. Enter wrong password 3. Login,"Error 'The username and password could not be verified.' shown",Yes - test_login.py
+TC-04,Open a second account funded from the first,P2,Functional,A registered account with balance,1. Go to Open New Account 2. Select Savings 3. Fund from existing Checking account,New account is created and appears in Accounts Overview,Yes - test_transfer.py
+TC-05,Transfer reconciles both account balances,P1,Functional,Two funded accounts,1. Transfer $50 from Checking to Savings,Checking decreases by $50; Savings increases by $50 - verified independently, not just the success banner,Yes - test_transfer.py
+TC-06,Transfer of $0 is accepted without balance change,P2,Negative/Finding,Two accounts,1. Transfer $0 between own accounts,"Site shows 'Transfer Complete' with no balance change - flagged as a finding, not a pass/fail bug",Yes - test_transfer.py
+TC-07,SQL - stored balance matches transaction ledger,P1,Data validation,Local mock ledger seeded,Run reconciliation query comparing accounts.balance vs SUM(transactions),No drift between stored balance and ledger sum,Yes - data-validation/reconciliation-queries.sql
