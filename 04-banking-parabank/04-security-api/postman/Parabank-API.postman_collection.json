@@ -1,0 +1,56 @@
+{
+  "info": {
+    "name": "Parabank API",
+    "description": "Parasoft's public REST services in front of the Parabank demo bank",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get Account By ID",
+      "event": [{
+        "listen": "test",
+        "script": { "exec": [
+          "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+          "const body = pm.response.json();",
+          "pm.test('account has an id and a type', () => { pm.expect(body.id).to.be.a('number'); pm.expect(body.type).to.be.a('string'); });"
+        ]}
+      }],
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Accept", "value": "application/json" }],
+        "url": "https://parabank.parasoft.com/parabank/services/bank/accounts/12345"
+      }
+    },
+    {
+      "name": "Get Account By ID - nonexistent (expect 400)",
+      "event": [{
+        "listen": "test",
+        "script": { "exec": [
+          "pm.test('Status code is 400', () => pm.response.to.have.status(400));"
+        ]}
+      }],
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Accept", "value": "application/json" }],
+        "url": "https://parabank.parasoft.com/parabank/services/bank/accounts/999999999"
+      }
+    },
+    {
+      "name": "Get Customer Accounts",
+      "event": [{
+        "listen": "test",
+        "script": { "exec": [
+          "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+          "const body = pm.response.json();",
+          "pm.test('returns an array of accounts', () => pm.expect(body).to.be.an('array'));",
+          "pm.test('every account belongs to the requested customer', () => body.forEach(a => pm.expect(a.customerId).to.eql(12212)));"
+        ]}
+      }],
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Accept", "value": "application/json" }],
+        "url": "https://parabank.parasoft.com/parabank/services/bank/customers/12212/accounts"
+      }
+    }
+  ]
+}
