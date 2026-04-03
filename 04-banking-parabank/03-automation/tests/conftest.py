@@ -39,7 +39,14 @@ def evidence(driver):
     os.makedirs(EVIDENCE_DIR, exist_ok=True)
 
     def _capture(name):
-        driver.save_screenshot(os.path.join(EVIDENCE_DIR, f"{name}.png"))
+        # A screenshot right after a click that triggers navigation can race the
+        # page transition and raise - confirmed via a real CI failure on this
+        # exact pattern elsewhere in this portfolio. Evidence is a bonus, not
+        # the test itself, so a failed screenshot is logged, not fatal.
+        try:
+            driver.save_screenshot(os.path.join(EVIDENCE_DIR, f"{name}.png"))
+        except Exception as exc:  # noqa: BLE001
+            print(f"Evidence screenshot '{name}' skipped: {exc}")
 
     return _capture
 

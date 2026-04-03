@@ -15,6 +15,10 @@
 
 By round 7 this was a recognizable **application pattern**, not four unrelated bugs: Parabank renders a container first and fills its text in a beat later, everywhere. Recognizing the pattern turned later instances into a one-line fix instead of a fresh investigation each time.
 
+## Real finding: the invalid-password test wasn't wrong, the assumption was
+
+Three further CI rounds re-failed `test_login_with_invalid_password_is_rejected`, each time landing back on the authenticated dashboard instead of an error page. Each round's "fix" targeted a suspected navigation race around the Log Out click — reasonable given the pattern above, but wrong here. The actual cause was confirmed by stepping outside the browser entirely: a raw `curl` POST to `login.htm` with a valid, real username and an intentionally wrong password returned `302 Found` with `Location: overview.htm`, and fetching that location showed the fully authenticated account dashboard. **Parabank's live login endpoint does not validate the password at all — only that the username exists.** The test was renamed to `test_login_with_invalid_password_is_currently_accepted` and now documents this as the finding it is, rather than asserting a rejection this application doesn't perform. This is a broken-authentication defect (OWASP A07:2021) worth flagging in the security section, not a test-automation bug.
+
 ## Infrastructure risk observed
 
 Parabank's Cloudflare bot-check recurred on a completely unrelated line of code in a later run — direct confirmation this is the shared instance being occasionally cautious about CI traffic, not a defect in this suite. Documented rather than hidden (see [`../01-planning-strategy/test-strategy.md`](../01-planning-strategy/test-strategy.md), §3).
@@ -31,4 +35,4 @@ Parabank's Cloudflare bot-check recurred on a completely unrelated line of code 
 | Metric | Value |
 |--------|-------|
 | P1 scenario automation ratio | 6/6 |
-| Open defects | 0 (1 finding: $0 transfer accepted, disposition: low-severity, reported) |
+| Open defects | 0 (2 findings: $0 transfer accepted (low severity); login accepts any password for a valid username (high severity - broken authentication), both reported) |

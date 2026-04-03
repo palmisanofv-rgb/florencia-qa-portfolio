@@ -9,8 +9,15 @@
 | Clickjacking / CSP / HSTS headers | `curl -I` | ⚠️ **Finding:** none of `X-Frame-Options`, `Content-Security-Policy`, `Strict-Transport-Security` present — same gap class as every other project in this portfolio |
 | API error handling on an invalid account ID | `GET /services/bank/accounts/999999999` | ✅ Returns `400`, not a stack trace or a `200` with null data |
 | API authorization boundary | `GET /services/bank/customers/12212/accounts` | ✅ Every account returned genuinely belongs to the requested customer ID (spot-checked, not assumed) |
+| Password validation on login | `curl -X POST /parabank/login.htm` with a valid username + wrong password | ❌ **Finding:** `302` redirect straight to the authenticated dashboard - see below |
 
 ## Findings detail
+
+### Login accepts any password for a valid username (High severity - broken authentication)
+**What:** a raw `curl` POST to `/parabank/login.htm` with a real, registered username and a deliberately wrong password returns `302 Found` with `Location: overview.htm`, and that URL serves the fully authenticated account dashboard. Repeated against a second, independently-registered account with the same result - not a one-off.
+**How this was found:** the Selenium suite's invalid-password test kept landing on the dashboard instead of an error page across several CI runs. The first instinct was to suspect a browser-automation timing bug (a pattern that *had* been the real cause for several other findings in this project, see the debugging log above) - but confirming the exact same behavior with `curl` alone, entirely outside the browser, ruled that out and pinned the cause on the application itself.
+**Risk:** the password field on this login form provides no real security boundary - anyone who knows or guesses a valid username is authenticated. On a real banking product this would be a critical, stop-ship finding (OWASP A07:2021 - Identification and Authentication Failures).
+**Disposition:** documented as observed; the corresponding test (`04-banking-parabank/03-automation/tests/test_login.py::test_login_with_invalid_password_is_currently_accepted`) asserts this actual behavior rather than the rejection it doesn't perform, so the suite reflects reality instead of silently failing forever.
 
 ### Missing `SameSite`/`Secure` on the session cookie (Medium severity for a banking app)
 **What:** the `JSESSIONID` cookie lacks `SameSite=Lax/Strict` and an explicit `Secure` flag.
