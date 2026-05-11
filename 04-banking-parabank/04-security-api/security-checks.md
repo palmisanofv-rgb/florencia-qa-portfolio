@@ -27,6 +27,23 @@
 ### Missing security headers (Low-Medium, recurring pattern across this portfolio)
 Same as [Project 01](../../01-ecommerce-automationexercise/04-security-api/security-checks.md) and [Project 03](../../03-healthcare-cura/04-security-api/security-checks.md) — worth noting as a *pattern*: none of the demo apps in this portfolio ship a CSP or HSTS header. On a real team, three unrelated findings of the same shape across different products would be worth raising as an org-wide gap, not three separate one-off tickets — the kind of pattern-recognition a test manager is expected to bring, not just an individual tester filing the same bug three times.
 
+### Zero-amount transfer accepted without rejection (Low severity, audit-trail concern)
+**What:** transferring exactly $0.00 between two distinct accounts still returns "Transfer Complete" rather than being rejected — confirmed directly (not just implied by unchanged balances) in [`../03-automation/tests/test_transfer.py::test_transfer_of_zero_amount_is_rejected`](../03-automation/tests/test_transfer.py).
+**Risk:** low on its own, but some banking systems intentionally reject $0 transfers as a matter of audit-trail hygiene (a $0 "transfer" is really just a no-op with a timestamp) — worth a product decision on whether this should be blocked, not automatically a bug.
+**Disposition:** documented as observed, same pattern as the invalid-password finding above — the test asserts the real behavior rather than an idealized rejection that doesn't happen.
+
+## Accessibility findings
+
+A separate, lightweight AI-assisted accessibility spot-check (alt text, contrast, keyboard reachability) was run against the homepage/login page — see [`../03-automation/accessibility-check.md`](../03-automation/accessibility-check.md) for full methodology. Summary:
+
+| Finding | Severity | Status |
+|---|---|---|
+| The "Admin Page" nav icon link has no accessible name at all (`alt`, `aria-label`, `title` all empty) | Medium | Reported, not fixed (third-party site) |
+| "Log In" button fails WCAG contrast: measured 3.14:1 against a 4.5:1 requirement | Medium | Reported, not fixed (third-party site) |
+| "Log In" button technically reachable but takes 13 keyboard Tab presses from a fresh page load | Medium | Reported, not fixed (third-party site) |
+
+Tracked at the portfolio level as [`risk-register.md`](../../00-qa-strategy-and-leadership/risk-register.md) R-31 and R-32.
+
 ## See also
 
 [`data-validation/`](data-validation) for the SQL-level reconciliation technique used to catch defects the API/UI layer can't see.
