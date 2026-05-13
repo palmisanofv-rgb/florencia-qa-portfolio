@@ -11,9 +11,9 @@ Parasoft's own demo banking app, framed as a legacy core-banking system. This pr
 | [`01-planning-strategy`](01-planning-strategy) | Business value & risk analysis, test plan |
 | [`02-test-cases`](02-test-cases) | 7 test cases (CSV) |
 | [`03-automation`](03-automation) | Selenium + Python: registration, login, transfer with real balance reconciliation |
-| [`04-security-api`](04-security-api) | Real Parabank REST API + security findings + SQL data-validation technique |
-| [`05-performance`](05-performance) | k6 smoke test |
-| [`06-evidence`](06-evidence) | Real screenshots, one per test case |
-| [`07-reports`](07-reports) | Sprint report (includes a real 7-round debugging log) + final report |
+| [`04-security-api`](04-security-api) | Real Parabank REST API + security findings (incl. broken authentication) + accessibility findings + SQL data-validation technique |
+| [`05-performance`](05-performance) | k6 staged-load smoke test — real run in [`last-run-results.md`](05-performance/last-run-results.md) |
+| [`06-evidence`](06-evidence) | 10 real screenshots |
+| [`07-reports`](07-reports) | Sprint 01 (real 7-round debugging log) + sprint 02 (a real test bug and a real k6 bug, both fixed) + final report |
 
-See [`07-reports/sprint-01-report.md`](07-reports/sprint-01-report.md) for the real bugs found and fixed against this live site.
+See [`07-reports/sprint-01-report.md`](07-reports/sprint-01-report.md) for the broken-authentication finding and the real bugs found fixing this suite, and [`07-reports/sprint-02-report.md`](07-reports/sprint-02-report.md) for what this sprint's live re-run turned up.
