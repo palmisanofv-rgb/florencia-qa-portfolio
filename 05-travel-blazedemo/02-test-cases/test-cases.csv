@@ -1,0 +1,6 @@
+TC ID,Title,Priority,Type,Preconditions,Steps,Expected Result,Automated
+TC-01,Search flights from home page,P1,Functional,None,"1. Go to blazedemo.com 2. Select departure/destination city 3. Click Find Flights",Reserve page shows a list of flights,Yes - booking-journey.spec.ts
+TC-02,Select a flight and proceed to purchase,P1,Functional,On reserve page,1. Click 'Choose This Flight' on any row,Purchase page loads with a 'has been reserved' heading,Yes - booking-journey.spec.ts
+TC-03,Complete purchase with valid billing details,P1,E2E,On purchase page,1. Fill billing/card fields 2. Click Purchase Flight,Confirmation page shows 'Thank you for your purchase today!',Yes - booking-journey.spec.ts
+TC-04,Confirmation heading is hardcoded (finding),P2,Finding,Completed a purchase for a different route,Compare confirmation heading city names against the route actually searched,"Confirmation always reads 'TLV to SFO' regardless of the real route searched - documented finding, not a pass/fail bug",Yes - booking-journey.spec.ts
+TC-05,Booking funnel responds within threshold under light load,P1,Performance,None,Run the JMeter smoke test (5 users / 2 iterations),95th percentile response time under 3s; 0% errors,Yes - jmeter/BlazeDemo-LoadTest.jmx
