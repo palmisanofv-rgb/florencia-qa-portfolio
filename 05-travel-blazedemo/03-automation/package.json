@@ -1,0 +1,9 @@
+{
+  "name": "blazedemo-playwright",
+  "version": "1.0.0",
+  "scripts": { "test": "playwright test" },
+  "devDependencies": {
+    "@playwright/test": "^1.47.0",
+    "typescript": "^5.5.4"
+  }
+}
