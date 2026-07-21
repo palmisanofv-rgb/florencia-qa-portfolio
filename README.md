@@ -2,6 +2,7 @@
 
 **QA Engineer | ISTQB Certified (Foundation + AI + GenAI) | Manual, Automation & Test Strategy**
 
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-fvpalmisano-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/fvpalmisano)
 [![QA Portfolio CI](https://github.com/palmisanofv-rgb/florencia-qa-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/palmisanofv-rgb/florencia-qa-portfolio/actions/workflows/ci.yml)
 
 This is my personal QA engineering lab — a place to practice and document full-lifecycle testing (planning, manual cases, automation, API/security, performance, reporting) across different tools and domains, and to build toward test **management** skills, not just execution. Every suite that can run unattended runs for real on every push via GitHub Actions — click the badge above for live results, not just static code.
@@ -64,11 +65,11 @@ Every project runs against a real, public, legally-testable sandbox (official ve
 | 03 | [CURA Healthcare](03-healthcare-cura) | Healthcare (legacy system) | Selenium + Java |
 | 04 | [Parabank](04-banking-parabank) | Fintech (legacy system) | Selenium + Python |
 | 05 | [BlazeDemo](05-travel-blazedemo) | Travel/Airline | Playwright + performance |
-| 06 | [the-internet.herokuapp.com](06-legacy-tools-theinternet) | Legacy internal tools | Selenium |
-| 07 | [OrangeHRM](07-hr-orangehrm) | HR/Enterprise SaaS | Playwright |
-| 08 | [DemoBlaze](08-ecommerce-demoblaze) | E-commerce + public API | Playwright |
-| 09 | [Mobile (Appium sample app)](09-mobile-appium) | Mobile | Appium |
-| 10 | [TodoMVC](10-productivity-todomvc) | Productivity/SaaS | Playwright |
+| 06 | the-internet.herokuapp.com | Legacy internal tools | Selenium |
+| 07 | OrangeHRM | HR/Enterprise SaaS | Playwright |
+| 08 | DemoBlaze | E-commerce + public API | Playwright |
+| 09 | Mobile (Appium sample app) | Mobile | Appium |
+| 10 | TodoMVC | Productivity/SaaS | Playwright |
 
 ---
 
